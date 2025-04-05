@@ -23,4 +23,8 @@ apiRouter.get('/users', checkToken, UserAPIController.index);
 apiRouter.get('/users/:id', UserAPIController.findByID);
 apiRouter.delete('/users/:id', UserAPIController.delete);
 
+<<<<<<< Updated upstream
 export default apiRouter;
+=======
+export default apiRouter;
+>>>>>>> Stashed changes

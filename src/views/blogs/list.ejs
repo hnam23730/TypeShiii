@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog List</title>
+    <!-- Custom fonts for this template-->
+    <link href="/css/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="/css/sb-admin-2.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        <%- include('../layout/Sidebar.ejs') %>
+        <!-- End of Sidebar -->
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Topbar -->
+                <%- include('../layout/Topbar.ejs') %>
+                <!-- End of Topbar -->
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800">Blog List</h1>
+                        <a href="/blogs/create" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">Create New Blog</a>
+                    </div>
+
+                    <!-- Blog List -->
+                    <div class="card mt-2">
+                        <div class="card-body">
+                            <ul>
+                                <% blogs.forEach(blog => { %>
+                                    <li>
+                                        <h2><%= blog.title %></h2>
+                                        <p><%= blog.content.substring(0, 100) %>...</p>
+                                        <a href="/blogs/<%= blog.id %>/edit" class="btn btn-sm btn-warning">Edit</a>
+                                        <form action="/blogs/<%= blog.id %>/delete" method="POST" style="display:inline;">
+                                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                        </form>
+                                    </li>
+                                <% }) %>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- End of Blog List -->
+
+                </div>
+                <!-- End of Page Content -->
+
+            </div>
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <%- include('../layout/Footer.ejs') %>
+            <!-- End of Footer -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="/js/jquery/jquery.min.js"></script>
+    <script src="/js/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/jquery-easing/jquery.easing.min.js"></script>
+    <script src="/js/sb-admin-2.min.js"></script>
+</body>
+</html>

@@ -37,6 +37,7 @@
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
+<<<<<<< Updated upstream
                     <div class="card mt-2">
                       <div class="card-header">
                           <h5 class="card-title">Update User
@@ -65,6 +66,36 @@
                       </div>
                   </div>
                     
+=======
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800">Edit User</h1>
+                        <a href="/users" class="btn btn-secondary">Back to List</a>
+                    </div>
+                
+                    <div class="card mt-2">
+                        <div class="card-body">
+                            <form method="post" action="/users/<%= userEdit.id %>/edit">
+                                <div class="form-group">
+                                    <label for="email">Email:</label>
+                                    <input type="email" id="email" name="email" class="form-control" value="<%= userEdit.email %>" required>
+                                </div>
+                
+                                <div class="form-group mt-2">
+                                    <label for="role">Role:</label>
+                                    <% roles.forEach(role => { %>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="roleId" id="role<%= role.id %>" value="<%= role.id %>"
+                                                <%= userEdit.role && userEdit.role.id === role.id ? "checked" : "" %>>
+                                            <label class="form-check-label" for="role<%= role.id %>"><%= role.name %></label>
+                                        </div>
+                                    <% }) %>
+                                </div>
+                
+                                <button type="submit" class="btn btn-primary mt-3">Update</button>
+                            </form>
+                        </div>
+                    </div>
+>>>>>>> Stashed changes
                 </div>
                 <!-- /.container-fluid -->
 

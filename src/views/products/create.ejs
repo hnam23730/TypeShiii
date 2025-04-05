@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Product</title>
+    <!-- Custom fonts for this template-->
+    <link href="/css/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="/css/sb-admin-2.min.css" rel="stylesheet">
+</head>
+
+<body id="page-top">
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        <%- include('../layout/Sidebar.ejs') %>
+        <!-- End of Sidebar -->
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Topbar -->
+                <%- include('../layout/Topbar.ejs') %>
+                <!-- End of Topbar -->
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800">Create Product</h1>
+                        <a href="/products" class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm">Back to List</a>
+                    </div>
+
+                    <!-- Form Card -->
+                    <div class="card mt-2">
+                        <div class="card-body">
+                            <form action="/products/create" method="POST">
+                                <div class="form-group">
+                                    <label for="name">Name:</label>
+                                    <input type="text" id="name" name="name" class="form-control" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="description">Description:</label>
+                                    <textarea id="description" name="description" rows="3" class="form-control" required></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="price">Price:</label>
+                                    <input type="number" id="price" name="price" step="0.01" class="form-control" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="imageUrl">Image URL:</label>
+                                    <input type="text" id="imageUrl" name="imageUrl" class="form-control" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="availability">Availability:</label>
+                                    <select id="availability" name="availability" class="form-control">
+                                        <option value="In Stock">In Stock</option>
+                                        <option value="Out of Stock">Out of Stock</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="height">Height (cm):</label>
+                                    <input type="number" id="height" name="height" step="0.01" class="form-control">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="shippingDetails">Shipping Details:</label>
+                                    <textarea id="shippingDetails" name="shippingDetails" rows="3" class="form-control"></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="category">Category:</label>
+                                    <select id="category" name="category" class="form-control">
+                                        <% categories.forEach(category => { %>
+                                            <option value="<%= category.id %>"><%= category.name %></option>
+                                        <% }) %>
+                                    </select>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary">Create Product</button>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- End of Form Card -->
+
+                </div>
+                <!-- /.container-fluid -->
+
+            </div>
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <%- include('../layout/Footer.ejs') %>
+            <!-- End of Footer -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="/js/jquery/jquery.min.js"></script>
+    <script src="/js/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/jquery-easing/jquery.easing.min.js"></script>
+    <script src="/js/sb-admin-2.min.js"></script>
+</body>
+
+</html>

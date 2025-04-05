@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+<<<<<<< Updated upstream
 
 <head>
 
@@ -20,6 +21,24 @@
 <body id="page-top">
     <!-- Page Wrapper -->
     <div id="wrapper">
+=======
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create User</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+     <!-- Custom fonts for this template-->
+     <link href="/css/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+     <link
+         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+         rel="stylesheet">
+     <!-- Custom styles for this template-->
+     <link href="/css/sb-admin-2.min.css" rel="stylesheet">
+</head>
+<body>
+     <!-- Page Wrapper -->
+     <div id="wrapper">
+>>>>>>> Stashed changes
 
         <!-- Sidebar -->
         <%- include('../layout/Sidebar.ejs') %>
@@ -36,6 +55,7 @@
                 <!-- End of Topbar -->
 
                 <!-- Begin Page Content -->
+<<<<<<< Updated upstream
                 <div class="container-fluid">
                     <div class="card mt-2">
                       <div class="card-header">
@@ -57,7 +77,7 @@
                                 <label for="exampleFormControlSelect2">Role</label>
                                 <% roles.forEach(role => { %>
                                 <div class="form-check form-check-inline">
-                                  <input name="roleId" class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio<%= role.id %>" value="<%= role.id %>">
+                                  <input checked name="roleId" class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio<%= role.id %>" value="<%= role.id %>">
                                   <label class="form-check-label" for="inlineRadio<%= role.id %>"><%= role.name %></label>
                                 </div>
                                 <% }) %>
@@ -73,6 +93,45 @@
                     
                 </div>
                 <!-- /.container-fluid -->
+=======
+            <div class="container">
+                
+                <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                    <h1 class="h3 mb-0 text-gray-800">Create Users</h1>
+                    <a href="/users" class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm">Back to List</a>
+                </div>
+                <div class="card-body"> 
+                    <form action="/users/create" method="post">
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="role" class="form-label">Role</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="roleId" id="role" value="1" checked>
+                                <label class="form-check-label" for="role">
+                                Admin
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="roleId" id="role" value="2" checked>
+                                <label class="form-check-label" for="role">
+                                User
+                                </label>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Create</button>
+                        
+                    </form>
+                </div>
+            </div>
+               <!-- /.container-fluid -->
+>>>>>>> Stashed changes
 
             </div>
             <!-- End of Main Content -->
@@ -91,6 +150,7 @@
         <i class="fas fa-angle-up"></i>
     </a>
 
+<<<<<<< Updated upstream
     <!-- Logout Modal-->
     <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
@@ -111,6 +171,9 @@
         </div>
     </div>
 
+=======
+  
+>>>>>>> Stashed changes
     <!-- Bootstrap core JavaScript-->
     <script src="/js/jquery/jquery.min.js"></script>
     <script src="/js/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -120,7 +183,11 @@
 
     <!-- Custom scripts for all pages-->
     <script src="/js/sb-admin-2.min.js"></script>
+<<<<<<< Updated upstream
 
 </body>
 
+=======
+</body>
+>>>>>>> Stashed changes
 </html>

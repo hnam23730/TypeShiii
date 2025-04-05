@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Blog</title>
+    <!-- Custom fonts for this template-->
+    <link href="/css/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="/css/sb-admin-2.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        <%- include('../layout/Sidebar.ejs') %>
+        <!-- End of Sidebar -->
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Topbar -->
+                <%- include('../layout/Topbar.ejs') %>
+                <!-- End of Topbar -->
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800">Create Blog</h1>
+                        <a href="/blogs" class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm">Back to List</a>
+                    </div>
+
+                    <!-- Form Card -->
+                    <div class="card mt-2">
+                        <div class="card-body">
+                            <form action="/blogs/create" method="POST">
+                                <div class="form-group">
+                                    <label for="title">Title:</label>
+                                    <input type="text" id="title" name="title" class="form-control" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="content">Content:</label>
+                                    <textarea id="content" name="content" rows="5" class="form-control" required></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="author">Author:</label>
+                                    <input type="text" id="author" name="author" class="form-control" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="categories">Categories:</label>
+                                    <input type="text" id="categories" name="categories" class="form-control">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="tags">Tags:</label>
+                                    <input type="text" id="tags" name="tags" class="form-control">
+                                </div>
+
+                                <button type="submit" class="btn btn-primary">Create</button>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- End of Form Card -->
+
+                </div>
+                <!-- End of Page Content -->
+
+            </div>
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <%- include('../layout/Footer.ejs') %>
+            <!-- End of Footer -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="/js/jquery/jquery.min.js"></script>
+    <script src="/js/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/jquery-easing/jquery.easing.min.js"></script>
+    <script src="/js/sb-admin-2.min.js"></script>
+</body>
+</html>

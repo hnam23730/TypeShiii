@@ -30,6 +30,7 @@
 
             <!-- Main Content -->
             <div id="content">
+<<<<<<< Updated upstream
 
                 <!-- Topbar -->
                 <%- include('../layout/Topbar.ejs') %>
@@ -50,7 +51,7 @@
                     
                         <div class="card-body">
                             <table class="table">
-                                <thead>
+                                <thead class="thead-light">
                                     <tr>
                                         <th scope="col">#</th>
                                         <th scope="col">Email</th>
@@ -108,6 +109,80 @@
         </div>
         <!-- End of Content Wrapper -->
 
+=======
+
+                <!-- Topbar -->
+                <%- include('../layout/Topbar.ejs') %>
+                <!-- End of Topbar -->
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800">User manager</h1>
+                            <a href="/users/create" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm"> Add new</a>
+
+                    </div>
+                    
+                    <div class="card mt-2">
+                    
+                        <div class="card-body">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Email</th>
+                                        <th scope="col">Role</th>
+                                        <th scope="col">Action</th>
+                                    </tr>
+                                <tbody>
+                                    <% users.forEach((user, index)=> { %>
+                                        <tr>
+                                            <th scope="row">
+                                                <%= index + 1 %>
+                                            </th>
+        
+                                            <td>
+                                                <%= user.email %>
+                                            </td>
+                                            <td>
+                                                <%= user.role ? user.role.name : 'No role' %>
+                                            </td>
+                                                <td>
+                                                    <a href="/users/<%= user.id %>/edit"><button type="button"
+                                                            class="btn btn-primary">Edit</button></a>
+        
+                                                    <% if(userLogin.id !=user.id) { %>
+                                                        <a onclick="return confirm('are you sure?')"
+                                                            href="/users/<%= user.id %>/delete" type="button"
+                                                            class="btn btn-danger">Delete</a>
+                                                    <% } %>
+        
+                                                </td>
+                                        </tr>
+                                        <% }); %>
+                                </tbody>
+                                </thead>
+        
+                            </table>
+        
+                        </div>
+                    </div>
+                    
+                </div>
+                <!-- /.container-fluid -->
+
+            </div>
+            <!-- End of Main Content -->
+            <!-- Footer -->
+            <%- include('../layout/Footer.ejs') %>
+            <!-- End of Footer -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+>>>>>>> Stashed changes
     </div>
     <!-- End of Page Wrapper -->
 
@@ -130,7 +205,11 @@
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+<<<<<<< Updated upstream
                     <a class="btn btn-primary" href="login.html">Logout</a>
+=======
+                    <a class="btn btn-primary" href="/login">Logout</a>
+>>>>>>> Stashed changes
                 </div>
             </div>
         </div>

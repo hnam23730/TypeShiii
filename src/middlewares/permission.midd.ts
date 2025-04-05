@@ -1,10 +1,14 @@
 import e, { NextFunction } from "express";
 
-export const checkPermission = (req: any, res: any, next: NextFunction) => {
-    const { userLogin } = req.session
-    if(userLogin.role.id == 1) {
-        next();
-    } else {
-        res.render('error/403')
+export const checkPermission = (req: any, res: any, next: any) => {
+    if (!req.session || !req.session.userLogin) {
+        return res.status(401).send("Unauthorized: Please log in.");
     }
-}
+
+    const user = req.session.userLogin;
+    if (user.roleId !== 1) { // Giả sử chỉ Admin có quyền
+        return res.status(403).send("Forbidden: You do not have permission.");
+    }
+
+    next();
+};

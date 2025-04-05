@@ -4,9 +4,9 @@ export const AppDataSource = new DataSource({
     host: "localhost",
     port: 3306,
     username: "root",
-    password: "123456@Abc",
+    password: "Blueshark_1",
     database: "myapp",
-    logging: true,
+    logging: false,
     synchronize: true,
     dropSchema: false,
     entities: ["src/entities/**.ts"]

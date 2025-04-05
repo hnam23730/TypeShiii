@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Category</title>
+    <link href="/css/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="/css/sb-admin-2.min.css" rel="stylesheet">
+</head>
+<body id="page-top">
+    <div id="wrapper">
+        <%- include('../layout/Sidebar.ejs') %>
+        <div id="content-wrapper" class="d-flex flex-column">
+            <div id="content">
+                <%- include('../layout/Topbar.ejs') %>
+                <div class="container-fluid">
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800">Edit Category</h1>
+                        <a href="/categories" class="btn btn-secondary">Back to List</a>
+                    </div>
+                    <div class="card mt-2">
+                        <div class="card-body">
+                            <form action="/categories/<%= category.id %>/edit" method="POST">
+                                <div class="form-group">
+                                    <label for="name">Category Name:</label>
+                                    <input type="text" id="name" name="name" class="form-control" value="<%= category.name %>" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Update</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <%- include('../layout/Footer.ejs') %>
+        </div>
+    </div>
+    <script src="/js/jquery/jquery.min.js"></script>
+    <script src="/js/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/sb-admin-2.min.js"></script>
+</body>
+</html>

@@ -1,24 +1,32 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm"
-import { Category } from "./Category"
-import { User } from "./User"
-@Entity({name: "posts"})
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from "typeorm";
+import { Category } from "./Catergory";
+import { User } from "./User";
+
+@Entity({ name: "posts" })
 export class Post {
     @PrimaryGeneratedColumn()
-    id: number
+    id: number;
 
-    @Column({type: "varchar"})
-    title: string
+    @Column({ type: "varchar" })
+    title: string;
 
-    @Column({type: "varchar"})
-    description?: string
+    @Column({ type: "varchar" })
+    description?: string;
 
-    @Column({type: "text"})
-    content: string
+    @Column({ type: "text" })
+    content: string;
 
-    @ManyToOne(() => Category, (category: Category) => category.posts, {onDelete: "CASCADE"})
-    category: Category
+    @ManyToOne(() => Category, (category: Category) => category.posts, { onDelete: "CASCADE" })
+    @JoinColumn({ name: "categoryId" })
+    category: Category;
 
-    @ManyToOne(() => User, (auth: User) => auth.posts, {onDelete: "CASCADE"})
-    auth: User
+    @Column()
+    categoryId: number;
 
+    @ManyToOne(() => User, (auth: User) => auth.posts, { onDelete: "CASCADE" })
+    @JoinColumn({ name: "authId" })
+    auth: User;
+
+    @Column()
+    authId: number;
 }

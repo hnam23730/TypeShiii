@@ -1,0 +1,13 @@
+<div class="hero__categories">
+    <div class="hero__categories__all">
+        <i class="fa fa-bars"></i>
+        <span>All Category</span>
+    </div>
+    <ul>
+        <% categories.forEach(category => { %>
+            <li class="<%= selectedCategory === category.name ? 'active' : '' %>">
+                <a href="/shop.grid?category=<%= category.name %>"><%= category.name %></a>
+            </li>
+        <% }) %>
+    </ul>
+</div>
