@@ -7,11 +7,8 @@
   # Thư mục chứa Netlify Functions
   functions = "netlify/functions"
 
-[functions]
-  "server" = { node_bundler = "esbuild" }
-
 [[redirects]]
-  # Chuyển hướng tất cả các request đến function 'server'
+  # Chuyển hướng tất cả các request đến function 'api'
   from = "/*"
-  to = "/.netlify/functions/server"
+  to = "/.netlify/functions/api"
   status = 200
