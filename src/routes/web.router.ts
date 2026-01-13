@@ -1,33 +1,33 @@
 import express, { Router, Request, Response,NextFunction } from 'express';
 import HomeController from '@controllers/home.controller';
 import AuthController from '@controllers/auth.controller';
+import passport from "../config/passport"
 import UserController from '@controllers/user.controller';
 import BlogController from "../controllers/blog.controller";
 import TokenController from '@controllers/token.controller';
 import CategoryController from "../controllers/category.controller";
 import { checkAuth } from 'src/middlewares/auth.midd';
 import { checkPermission } from 'src/middlewares/permission.midd';
-<<<<<<< Updated upstream
-import TokenController from '@controllers/token.controller';
-=======
 import ProductController from "@controllers/product.controller";
 import CartController from "@controllers/cart.controller";
 import { AppDataSource } from "../database/data-source";
 import { Product } from "../entities/Product";
-import { Category } from '@entities/Catergory';
+import { Category } from '@entities/Category';
 import asyncHandler from "express-async-handler";
 import { createOrder, captureOrder } from '@services/paypal.service';
 import OpenAI from "openai";
 import { OrderController } from '@controllers/OrderController';
 import { Order } from '@entities/orders';
 import WishlistController from '@controllers/wishlist.controller';
+import { Blog } from '@entities/Blog';
+import { sendEmail } from '@services/email.service'; // Import sendEmail
 
->>>>>>> Stashed changes
+
 
 const router: Router = express.Router();
 const fetch = require('node-fetch');
 const sendMessage = (recipientId: string, message: string) => {
-    const PAGE_ACCESS_TOKEN = "EAAJNNz6KRDcBOZBNbd5E8bbJIdeGhYdAgJicR5h3c8E3xEhcf3p8RmZCcBbLFEOc5mVZCANmqFaXoHbOgGdWV4LHZBjXJXnqWj9fRqkPcuhq1mP4ZAhgiw1MzhZAOoOD2Axzm5GW8HnwX5r1NNrmYHoYsgaccIqzpZCAZCQ5hW7XH5CtDijvU8b0HxXjZBAyNDkUNwwn9cdt8CH0vgFNpmgZDZD";
+    const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN; // Lấy từ biến môi trường
 
     const requestBody = {
         recipient: {
@@ -47,26 +47,16 @@ const sendMessage = (recipientId: string, message: string) => {
 const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY, // Thêm API key vào file .env
 })
-
 router.use((req, res, next) => {
     const shopingCart = (req.session as any).shopingCart || [];
     const totalQuantity = shopingCart.reduce((sum: number, item: any) => sum + item.quantity, 0);
-
-    // Truyền số lượng sản phẩm vào tất cả các view
     res.locals.cartQuantity = totalQuantity;
-    next();
-});
-router.use((req, res, next) => {
-    const shopingCart = (req.session as any).shopingCart || [];
+    
     const wishlist = (req.session as any).wishlist || [];
-
-    const totalQuantity = shopingCart.reduce((sum: number, item: any) => sum + item.quantity, 0);
-
-    // Truyền số lượng sản phẩm vào tất cả các view
-    res.locals.cartQuantity = totalQuantity;
     res.locals.wishlistCount = wishlist.length; // Tính số lượng sản phẩm trong wishlist
     next();
 });
+
 router.get("/webhook", (req: Request, res: Response) => {
     const VERIFY_TOKEN = process.env.MY_TOKEN;
     const mode = req.query["hub.mode"];
@@ -124,11 +114,7 @@ router.get("/front", async (req, res) => {
 router.get("/", (req, res) => {
     res.redirect("/front");
 });
-router.get('/home', HomeController.index);
-router.get('/home', async (req, res) => {
-    const userLogin = res.locals.userLogin;
-    res.render('home.ejs', { userLogin });
-});
+router.get('/home', checkAuth, checkPermission, HomeController.index);
 router.get('/register', AuthController.showFormRegister);
 router.post('/register', AuthController.register);
 router.get('/login', AuthController.showFormLogin);
@@ -140,18 +126,21 @@ router.get('/users/:id/edit', checkAuth, checkPermission, UserController.showEdi
 router.post('/users/:id/edit', checkAuth, checkPermission, UserController.update);
 router.get('/users/:id/delete',checkAuth, checkPermission, UserController.delete);
 router.get('/logout', checkAuth, AuthController.logout);
-<<<<<<< Updated upstream
-router.get('/users/create', checkAuth, checkPermission, UserController.showFormCreate);
-router.post('/users/store', checkAuth, checkPermission, UserController.createUser);
-router.get('/users/:id/edit', checkAuth, checkPermission, UserController.showFormEdit);
-router.post('/users/:id/edit', checkAuth, checkPermission, UserController.editUser);
-
-router.get('/api-keys',checkAuth, TokenController.index);
-router.post('/api-keys/store',checkAuth, TokenController.store);
-router.get('/api-keys/:id/delete',checkAuth, TokenController.deleteToken);
-router.get('/get-my-tokens', TokenController.getAllTokens)
-=======
 //user gì đó
+router.get(
+    "/auth/google",
+    passport.authenticate("google", { scope: ["profile", "email"] })
+);
+router.get(
+    "/auth/google/callback",
+    passport.authenticate("google", { failureRedirect: "/login" }),
+    (req, res) => {
+        // Đăng nhập thành công, chuyển hướng đến trang chính
+        res.redirect("/");
+    }
+);
+
+//Đăng nhập bằng google
 
 router.get("/blogs", BlogController.list);
 router.get("/blogs/create", BlogController.showCreateForm);
@@ -159,12 +148,54 @@ router.post("/blogs/create", BlogController.create);
 router.get("/blogs/:id/edit", BlogController.showEditForm);
 router.post("/blogs/:id/edit", BlogController.update);
 router.post("/blogs/:id/delete", BlogController.delete);
-router.get("/blog-details", (req, res) => {
-    res.render("frontpage/blog-details.ejs");
+router.get("/blog-details/:id", async (req: Request, res: Response) => {
+    try {
+        const blogId = parseInt(req.params.id, 10);
+
+        // Kiểm tra nếu `id` không phải là số hợp lệ
+        if (isNaN(blogId) || blogId < 1) {
+            console.error("Invalid blog ID:", req.params.id);
+            res.status(400).send("Invalid blog ID");
+            return;
+        }
+
+        // Tìm bài viết trong cơ sở dữ liệu
+        const blog = await AppDataSource.getRepository(Blog).findOneBy({ id: blogId });
+
+        // Nếu không tìm thấy bài viết
+        if (!blog) {
+            console.error("Blog not found for ID:", blogId);
+            res.status(404).send("Blog not found");
+            return;
+        }
+
+        // Render trang chi tiết blog
+        res.render("frontpage/blog-details.ejs", { blog });
+    } catch (error) {
+        console.error("Error fetching blog details:", error);
+        res.status(500).send("Internal Server Error");
+    }
 });
-router.get("/blog", (req, res) => {
-    res.render("frontpage/blog.ejs");
+// router.get("/blog", (req, res) => {
+//     res.render("frontpage/blog.ejs");
+// });
+router.get("/blog", async (req, res) => {
+    try {
+        // Lấy danh sách blog từ cơ sở dữ liệu, sắp xếp theo ngày tạo mới nhất và giới hạn 3 blog
+        const blogs = await AppDataSource.getRepository(Blog)
+            .createQueryBuilder("blog")
+            .orderBy("blog.createdAt", "DESC")
+            .limit(3)
+            .getMany();
+
+        // Render view và truyền biến blogs
+        res.render("frontpage/blog.ejs", { blogs });
+    } catch (error) {
+        console.error("Error fetching blogs:", error);
+        res.status(500).send("Internal Server Error");
+    }
 });
+
 //blog gì đó
 
 router.get('/api-keys',checkAuth, TokenController.index);
@@ -216,7 +247,36 @@ router.get('/wishlist', WishlistController.viewWishlist);
 router.post('/wishlist/add', WishlistController.addToWishlist);
 router.post('/wishlist/remove', WishlistController.removeFromWishlist);
 router.post('/wishlist/buy', WishlistController.buyFromWishlist);
+router.post("/wishlist/buy-selected", (req, res) => {
+    try {
+        const selectedProducts = req.body.selectedProducts || []; // Lấy danh sách sản phẩm được chọn
+        const wishlist = (req.session as any).wishlist || [];
+        const shopingCart = (req.session as any).shopingCart || []; // SỬA LỖI: Dùng `shopingCart` thay vì `cart`
 
+        // Lọc các sản phẩm được chọn từ wishlist
+        const productsToBuy = wishlist.filter((item: any) => selectedProducts.includes(item.id.toString()));
+
+        // Thêm các sản phẩm vào giỏ hàng
+        productsToBuy.forEach((product: any) => {
+            const existingItem = shopingCart.find((item: any) => item.id === product.id);
+            if (existingItem) {
+                existingItem.quantity += 1; // Tăng số lượng nếu sản phẩm đã tồn tại trong giỏ hàng
+            } else {
+                shopingCart.push({ ...product, quantity: 1 });
+            }
+        });
+        (req.session as any).shopingCart = shopingCart; // SỬA LỖI: Lưu lại vào `shopingCart`
+        // Xóa các sản phẩm đã mua khỏi wishlist
+        const updatedWishlist = wishlist.filter((item: any) => !selectedProducts.includes(item.id.toString()));
+        (req.session as any).wishlist = updatedWishlist;
+        
+
+        res.redirect("/shoping-cart"); // Chuyển hướng đến trang giỏ hàng
+    } catch (error) {
+        console.error("Error buying selected products from wishlist:", error);
+        res.status(500).send("Internal Server Error");
+    }
+});
 
 router.get("/shoping-cart", async (req, res) => {
     try {
@@ -249,7 +309,7 @@ router.get("/shoping-cart/data", (req, res) => {
         res.status(500).json({ error: "Internal Server Error" });
     }
 });
-router.post("/shoping-cart/add",asyncHandler(async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+router.post("/shoping-cart/add",checkAuth, asyncHandler(async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
             const { productId, quantity } = req.body;
 
@@ -346,7 +406,167 @@ router.post("/shoping-cart/remove", (req, res) => {
         res.status(500).json({ error: "Internal Server Error" });
     }
 });
+//trang sản phẩm gì đó
+router.get('/order-success', (req: Request, res: Response) => {
+    const order = (req.session as any).order;
+
+    // Kiểm tra nếu không có thông tin đơn hàng
+    if (!order) {
+        res.redirect('/shoping-cart'); // Chuyển hướng về giỏ hàng nếu không có đơn hàng
+        return;
+    }
+
+    res.render('frontpage/order-success.ejs', { order });
+});
 //giỏ hàng gì đó
+router.get('/checkout', (req: Request, res: Response) => {
+    const shopingCart = (req.session as any).shopingCart || [];
+    let total = shopingCart.reduce((sum: number, item: any) => {
+        if (typeof item.price !== "number" || item.price <= 0 || typeof item.quantity !== "number" || item.quantity <= 0) {
+            console.warn("Invalid item in cart:", item);
+            return sum;
+        }
+        return sum + item.price * item.quantity;
+    }, 0);
+
+    // Nếu total không hợp lệ, đặt giá trị mặc định
+    if (isNaN(total) || total <= 0) {
+        console.warn("Total is invalid. Setting default value.");
+        total = 1.00; // Giá trị mặc định
+    }
+
+    res.render('frontpage/checkout.ejs', { shopingCart, total });
+});
+router.post('/checkout', asyncHandler(async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        const { firstName, lastName, country, address, city, zip, phone, email } = req.body;
+
+        // Kiểm tra thông tin bắt buộc
+        if (!firstName || !lastName || !country || !address || !city || !zip || !phone || !email) {
+            res.status(400).send('All fields are required.');
+            return;
+        }
+
+        // Lấy giỏ hàng từ session
+        const shopingCart = (req.session as any).shopingCart || [];
+        if (shopingCart.length === 0) {
+            res.status(400).send('Your cart is empty.');
+            return;
+        }
+
+        // Tính tổng tiền
+        const total = shopingCart.reduce((sum: number, item: any) => sum + item.price * item.quantity, 0);
+
+        // Lưu thông tin đơn hàng vào cơ sở dữ liệu
+        const order = new Order();
+        order.customerName = `${firstName} ${lastName}`;
+        order.customerEmail = email;
+        order.customerPhone = phone;
+        order.customerAddress = `${address}, ${city}, ${country}, ${zip}`;
+        order.total = total;
+        order.status = "Processing";
+        
+
+        await AppDataSource.getRepository(Order).save(order);
+
+        // Xóa giỏ hàng sau khi đặt hàng thành công
+        (req.session as any).shopingCart = [];
+
+        (req.session as any).order = order;
+
+        // Trả về thông báo thành công
+        res.redirect('/order-success');
+    } catch (error) {
+        console.error("Error during checkout:", error);
+        next(error);
+    }
+}));
+//thanh toán gì đó
+router.post("/api/payment/paypal/create", asyncHandler(async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        const { total } = req.body;
+
+        if (typeof total !== "number" || isNaN(total) || total <= 0) {
+            res.status(400).json({ error: "Invalid total amount" });
+            return;
+        }
+
+        const order = await createOrder(total);
+
+        if (!order || !order.id) {
+            res.status(500).json({ error: "Failed to create PayPal order" });
+            return;
+        }
+
+        res.json({ id: order.id });
+        console.log("Total amount received:", total);
+    } catch (error) {
+        console.error("Error creating PayPal order:", error);
+        next(error); // Pass the error to the next middleware
+    }
+}));
+router.get("/api/payment/paypal/capture", asyncHandler(async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+try {
+        const { token } = req.query;
+
+        if (!token) {
+            res.status(400).json({ error: "Missing token" });
+            return;
+        }
+
+        // Xác nhận thanh toán PayPal
+        const capture = await captureOrder(token as string);
+
+        if (!capture || !capture.purchase_units || !capture.purchase_units[0]) {
+            res.status(500).json({ error: "Failed to capture PayPal order" });
+            return;
+        }
+
+        // Lấy thông tin đơn hàng từ PayPal
+        const purchaseUnit = capture.purchase_units[0];
+        const total = purchaseUnit.amount?.value || "0.00"; // Kiểm tra `amount` và `value`
+        const name = purchaseUnit.shipping?.name?.full_name || "Unknown"; // Kiểm tra `name` và `full_name`
+        const address = purchaseUnit.shipping?.address || {};
+        const phone = purchaseUnit.shipping?.phone?.phone_number?.national_number || "0000000000"; // Kiểm tra `phone`
+
+        const userEmail = (req.session as any).userLogin?.email;
+
+        if (!userEmail) {
+            res.status(400).json({ error: "User email not found in session" });
+            return;
+        }
+        // Lưu thông tin đơn hàng vào cơ sở dữ liệu
+        const order = new Order();
+        order.customerName = name;
+        order.customerEmail = userEmail;
+        order.customerPhone = phone;
+        order.customerAddress = `${address.address_line_1}, ${address.admin_area_2}, ${address.admin_area_1}, ${address.postal_code}, ${address.country_code}`;
+        order.total = parseFloat(total);
+        order.status = "Completed";
+
+        await AppDataSource.getRepository(Order).save(order);
+
+        // Gửi email thông tin hóa đơn
+        await sendEmail(userEmail, "Hóa đơn thanh toán thành công", `<h1>Hóa đơn thanh toán</h1><p>Xin chào ${name},</p><p>Cảm ơn bạn đã thanh toán thành công. Dưới đây là thông tin hóa đơn của bạn:</p><ul><li>Tổng tiền: ${order.total} USD</li><li>Địa chỉ giao hàng: ${order.customerAddress}</li><li>Số điện thoại: ${order.customerPhone}</li></ul><p>Chúng tôi sẽ xử lý đơn hàng của bạn trong thời gian sớm nhất.</p><p>Trân trọng,</p><p>Đội ngũ hỗ trợ</p>`);
+
+        (req.session as any).shopingCart = []; // Xóa toàn bộ sản phẩm trong giỏ hàng
+
+        // Chuyển hướng về màn hình thanh toán thành công
+        res.render("frontpage/order-success.ejs", { order });
+    } catch (error) {
+        console.error("Error capturing PayPal order:", error);
+        next(error); // Chuyển lỗi đến middleware xử lý lỗi
+    }
+}));
+//thanh toán trực tuyến gì đó
+
+router.get("/contact", (req, res) => {
+    res.render("frontpage/contact.ejs");
+});
+//liên hệ gì đó
+
+router.get("/shop-details/:id", ProductController.showDetails);
+//chi tiết sản phẩm gì đó
 
 router.get("/shop.grid", async (req, res) => {
     try {
@@ -413,147 +633,9 @@ router.get("/shop.grid", async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 });
-//trang sản phẩm gì đó
 
-router.get('/checkout', (req: Request, res: Response) => {
-    const shopingCart = (req.session as any).shopingCart || [];
-    const total = shopingCart.reduce((sum: number, item: any) => sum + item.price * item.quantity, 0);
 
-    res.render('frontpage/checkout.ejs', { shopingCart, total });
-});
-router.post('/checkout', asyncHandler(async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    try {
-        const { firstName, lastName, country, address, city, zip, phone, email } = req.body;
 
-        // Kiểm tra thông tin bắt buộc
-        if (!firstName || !lastName || !country || !address || !city || !zip || !phone || !email) {
-            res.status(400).send('All fields are required.');
-            return;
-        }
-
-        // Lấy giỏ hàng từ session
-        const shopingCart = (req.session as any).shopingCart || [];
-        if (shopingCart.length === 0) {
-            res.status(400).send('Your cart is empty.');
-            return;
-        }
-
-        // Tính tổng tiền
-        const total = shopingCart.reduce((sum: number, item: any) => sum + item.price * item.quantity, 0);
-
-        // Lưu thông tin đơn hàng vào cơ sở dữ liệu
-        const order = new Order();
-        order.customerName = `${firstName} ${lastName}`;
-        order.customerEmail = email;
-        order.customerPhone = phone;
-        order.customerAddress = `${address}, ${city}, ${country}, ${zip}`;
-        order.total = total;
-        order.status = "Processing";
-
-        await AppDataSource.getRepository(Order).save(order);
-
-        // Xóa giỏ hàng sau khi đặt hàng thành công
-        (req.session as any).shopingCart = [];
-
-        // Trả về thông báo thành công
-        res.redirect('/order-success');
-    } catch (error) {
-        console.error("Error during checkout:", error);
-        next(error);
-    }
-}));
-//thanh toán gì đó
-
-router.get("/contact", (req, res) => {
-    res.render("frontpage/contact.ejs");
-});
-//liên hệ gì đó
-
-router.get("/shop-details/:id", asyncHandler(async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    try {
-        const productId = parseInt(req.params.id, 10);
-
-        // Kiểm tra nếu `id` không phải là số hợp lệ
-        if (isNaN(productId) || productId < 1) {
-            console.error("Invalid product ID:", req.params.id);
-            res.status(400).send("Invalid product ID");
-            return;
-        }
-        // Tìm sản phẩm trong cơ sở dữ liệu
-        const product = await AppDataSource.getRepository(Product)
-            .createQueryBuilder("product")
-            .leftJoinAndSelect("product.category", "category")
-            .where("product.id = :id", { id: productId })
-            .getOne();
-        // Nếu không tìm thấy sản phẩm
-        if (!product) {
-            console.error("Product not found for ID:", productId);
-            res.status(404).send("Product not found");
-            return;
-        }
-
-        // Nếu không tìm thấy sản phẩm
-        if (!product) {
-            console.error("Product not found for ID:", productId);
-            res.status(404).send("Product not found");
-            return;
-        }
-
-        // Render trang chi tiết sản phẩm
-        res.render("frontpage/shop-details.ejs", { product });
-    } catch (error) {
-        console.error("Error fetching product details:", error);
-        next(error); // Chuyển lỗi đến middleware xử lý lỗi
-    }
-}));
-//chi tiết sản phẩm gì đó
-
-router.get('/order-success', (req: Request, res: Response) => {
-    const order = (req.session as any).order;
-
-    // Kiểm tra nếu không có thông tin đơn hàng
-    if (!order) {
-        res.redirect('/shoping-cart'); // Chuyển hướng về giỏ hàng nếu không có đơn hàng
-        return;
-    }
-
-    res.render('frontpage/order-success.ejs', { order });
-});
-
-router.post("/api/payment/paypal/create", asyncHandler(async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    try {
-        const { total } = req.body;
-
-        if (!total || isNaN(total)) {
-            res.status(400).json({ error: "Invalid total amount" });
-            return;
-        }
-
-        const order = await createOrder(total);
-        res.json({ id: order.id });
-    } catch (error) {
-        console.error("Error creating PayPal order:", error);
-        next(error); // Pass the error to the next middleware
-    }
-}));
-
-router.get("/api/payment/paypal/capture", asyncHandler(async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    try {
-        const { token } = req.query;
-
-        if (!token) {
-            res.status(400).json({ error: "Missing token" });
-            return;
-        }
-
-        const capture = await captureOrder(token as string);
-        res.render("frontpage/order-success.ejs", { order: capture });
-    } catch (error) {
-        console.error("Error capturing PayPal order:", error);
-        next(error); // Pass the error to the next middleware
-    }
-}));
-//thanh toán trực tuyến gì đó
 
 // Route xử lý yêu cầu chatbot
 router.post("/chat", asyncHandler(async (req: Request, res: Response): Promise<void> => {
@@ -578,6 +660,5 @@ router.post("/chat", asyncHandler(async (req: Request, res: Response): Promise<v
     }
 }));
 
->>>>>>> Stashed changes
 
 export default router;

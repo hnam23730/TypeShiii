@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { AppDataSource } from "../database/data-source";
-import { Category } from "../entities/Catergory";
+import { Category } from "../entities/Category";
 import { Product } from "@entities/Product";
 
 class CategoryController {
@@ -78,15 +78,9 @@ class CategoryController {
     static async delete(req: Request, res: Response) {
         try {
             const categoryId = parseInt(req.params.id);
-    
-            // Set categoryId to NULL for all products associated with this category
-            await AppDataSource.getRepository(Product).createQueryBuilder()
-                .update(Product)
-                .set({ category: null })
-                .where("categoryId = :categoryId", { categoryId })
-                .execute();
-    
-            // Delete the category
+
+            // Do `onDelete: 'SET NULL'` trong Product entity,
+            // database sẽ tự động cập nhật các sản phẩm liên quan về NULL.
             await AppDataSource.getRepository(Category).delete(categoryId);
     
             res.redirect("/categories");

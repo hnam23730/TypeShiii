@@ -6,7 +6,7 @@ export const checkPermission = (req: any, res: any, next: any) => {
     }
 
     const user = req.session.userLogin;
-    if (user.roleId !== 1) { // Giả sử chỉ Admin có quyền
+    if (!user || user.roleId !== 1) { // Giả sử chỉ Admin có quyền
         return res.status(403).send("Forbidden: You do not have permission.");
     }
 

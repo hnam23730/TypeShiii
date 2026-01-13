@@ -4,16 +4,10 @@ import { User } from "@entities/User";
 const tokenRepository = AppDataSource.getRepository(Token);
 import { v4 as uuidv4 } from 'uuid';
 import UserService from "./user.service";
-<<<<<<< Updated upstream
-class TokenService {
-    static async getAllTokens(req: any, res:any): Promise<any> {
-        const {userLogin} = req.session;
-=======
 
 class TokenService {
     static async getAllTokens(req: any, res: any): Promise<any> {
         const { userLogin } = req.session;
->>>>>>> Stashed changes
         return await tokenRepository.find({
             where: {
                 user: {
@@ -24,15 +18,6 @@ class TokenService {
     }
 
     static async createToken(data: any, req: any): Promise<any> {
-<<<<<<< Updated upstream
-        const {userLogin} = req.session;
-        const{keyName} = data;
-        const newToken = new Token();
-        newToken.name = keyName;
-        newToken.key = uuidv4();
-        newToken.active = 'active';
-        const user = await UserService.findUseById(userLogin.id)
-=======
         const { userLogin } = req.session;
         const { keyName } = data;
         const newToken = new Token();
@@ -40,7 +25,6 @@ class TokenService {
         newToken.key = uuidv4();
         newToken.status = "active";
         const user = await UserService.findUseById(userLogin.id);
->>>>>>> Stashed changes
         newToken.user = user;
         await tokenRepository.save(newToken);
     }
@@ -53,9 +37,6 @@ class TokenService {
         });
     }
 
-<<<<<<< Updated upstream
-    static async delete(id: number): Promise<any> {
-=======
     static async updateTokenName(id: number, newName: string): Promise<any> {
         await tokenRepository.update(id, { name: newName });
     }
@@ -65,7 +46,6 @@ class TokenService {
     }
 
     static async deleteToken(id: number): Promise<any> {
->>>>>>> Stashed changes
         return await tokenRepository.delete(id);
     }
 }

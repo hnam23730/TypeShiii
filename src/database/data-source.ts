@@ -1,4 +1,8 @@
-import { DataSource } from "typeorm"
+import "reflect-metadata";
+import { DataSource } from "typeorm";
+import { Product } from "../entities/Product";
+import { Session } from "../entities/Session";
+
 export const AppDataSource = new DataSource({
     type: "mysql",
     host: "localhost",
@@ -9,5 +13,7 @@ export const AppDataSource = new DataSource({
     logging: false,
     synchronize: true,
     dropSchema: false,
-    entities: ["src/entities/**.ts"]
+    entities: [__dirname + "/../entities/**/*.{js,ts}", Session],
+    migrations: [__dirname + "/../migrations/**/*.{js,ts}"],
+    subscribers: [__dirname + "/../subscribers/**/*.{js,ts}"],
 })

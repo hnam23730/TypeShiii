@@ -1,4 +1,3 @@
-import RoleService from "@services/role.service";
 import UserService from "@services/user.service";
 import RoleService from "@services/role.service";
 import { Request, Response } from "express";
@@ -81,28 +80,6 @@ class UserController {
             console.error("Error deleting user:", error);
             res.status(500).send("Internal Server Error");
         }
-    }
-
-    static async showFormCreate(req: any, res: Response) {
-        const roles = await RoleService.getAllRoles();
-        res.render('users/create.ejs', {roles: roles});
-    }
-
-    static async createUser(req: any, res: Response) {
-        await UserService.store(req.body);
-        res.redirect('/users');
-    }
-
-    static async showFormEdit(req: any, res: Response) {
-        const roles = await RoleService.getAllRoles();
-        const userEdit = await UserService.findUseById(req.params.id);
-        console.log(userEdit);
-        res.render('users/edit.ejs', {roles: roles, userEdit: userEdit});
-    }
-
-    static async editUser(req: any, res: Response) {
-        await UserService.edit(req.params.id, req.body);
-        res.redirect('/users');
     }
 }
 

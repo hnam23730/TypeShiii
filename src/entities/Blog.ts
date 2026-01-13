@@ -15,6 +15,9 @@ export class Blog {
     author: string;
 
     @Column({ nullable: true })
+    imageUrl: string;
+
+    @Column({ nullable: true })
     categories: string;
 
     @Column({ nullable: true })

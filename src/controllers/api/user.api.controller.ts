@@ -1,15 +1,3 @@
-<<<<<<< Updated upstream
-import RoleService from "@services/role.service";
-import UserService from "@services/user.service";
-
-class UserAPIController {
-    static async index(req: Request, res: any): Promise<any> {
-        try {
-            const users =  await UserService.getAllUsers();
-            return res.json({status:'success', data: users});
-        }catch (err: any) {
-            return res.json({status:'error', message: err.message});
-=======
 //import RoleService from "@services/role.service";
 import UserService from "@services/user.service";
 
@@ -21,7 +9,6 @@ class UserAPIController {
         } catch (error) {
             console.error("Error fetching users:", error);
             res.status(500).send("Internal Server Error");
->>>>>>> Stashed changes
         }
     }
 

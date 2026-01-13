@@ -1,17 +1,8 @@
-<<<<<<< Updated upstream
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from "typeorm"
-import { Role } from "./Role";
-import { Post } from "./Post";
-import { Token } from "./Token";
-
-@Entity({name: "users"})
-=======
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, OneToMany } from "typeorm";
 import { Role } from "./Role";
 import { Post } from "./Post";
 import { Token } from "./Token";
 @Entity({ name: "users" })
->>>>>>> Stashed changes
 export class User {
     @PrimaryGeneratedColumn()
     id: number;
@@ -38,16 +29,4 @@ export class User {
     @OneToMany(() => Token, (token: Token) => token.user)
     tokens?: Token[]
 
-<<<<<<< Updated upstream
-    @ManyToOne(() => Role, (role: Role) => role.users)
-    role?: Role
-
-    @OneToMany(() => Post, (post: Post) => post.auth)
-    posts?: Post[]
-
-    @OneToMany(() => Token, (token: Token) => token.user)
-    tokens?: Token[]
-
-=======
->>>>>>> Stashed changes
 }

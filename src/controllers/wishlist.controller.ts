@@ -37,6 +37,7 @@ class WishlistController {
     
             (req.session as any).wishlist = wishlist; // Lưu danh sách yêu thích vào session
             res.json({ success: true, message: "Product added to wishlist" });
+       
         } catch (error) {
             console.error("Error adding to wishlist:", error);
             next(error); // Chuyển lỗi đến middleware xử lý lỗi
@@ -63,12 +64,12 @@ class WishlistController {
             (req.session as any).wishlist = wishlist;
 
             // Thêm sản phẩm vào giỏ hàng
-            const cart = (req.session as any).cart || [];
-            const existingItem = cart.find((item: any) => item.id === product.id);
+            const shopingCart = (req.session as any).shopingCart || []; // SỬA LỖI: Dùng `shopingCart`
+            const existingItem = shopingCart.find((item: any) => item.id === product.id);
             if (existingItem) {
                 existingItem.quantity += 1; // Tăng số lượng nếu sản phẩm đã tồn tại trong giỏ hàng
             } else {
-                cart.push({
+                shopingCart.push({
                     id: product.id,
                     name: product.name,
                     price: product.price,
@@ -76,7 +77,7 @@ class WishlistController {
                     quantity: 1,
                 });
             }
-            (req.session as any).cart = cart;
+            (req.session as any).shopingCart = shopingCart; // SỬA LỖI: Lưu lại vào `shopingCart`
 
             res.redirect('/shoping-cart'); // Chuyển hướng đến trang giỏ hàng
         } catch (error) {

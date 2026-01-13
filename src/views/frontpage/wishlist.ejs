@@ -7,7 +7,7 @@
     <meta name="keywords" content="Ogani, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Ogani | Template</title>
+    <title>Nana</title>
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;900&display=swap" rel="stylesheet">
@@ -31,61 +31,7 @@
 
     <!-- Humberger Begin -->
     <div class="humberger__menu__overlay"></div>
-    <div class="humberger__menu__wrapper">
-        <div class="humberger__menu__logo">
-            <a href="#"><img src="img/logo.png" alt=""></a>
-        </div>
-        <div class="humberger__menu__cart">
-            <ul>
-                <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li>
-                <li><a href="#"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li>
-            </ul>
-            <div class="header__cart__price">item: <span>$150.00</span></div>
-        </div>
-        <div class="humberger__menu__widget">
-            <div class="header__top__right__language">
-                <img src="img/language.png" alt="">
-                <div>English</div>
-                <span class="arrow_carrot-down"></span>
-                <ul>
-                    <li><a href="#">Spanis</a></li>
-                    <li><a href="#">English</a></li>
-                </ul>
-            </div>
-            <div class="header__top__right__auth">
-                <a href="#"><i class="fa fa-user"></i> Login</a>
-            </div>
-        </div>
-        <nav class="humberger__menu__nav mobile-menu">
-            <ul>
-                <li class="active"><a href="./index.html">Home</a></li>
-                <li><a href="./shop-grid.ejs">Shop</a></li>
-                <li><a href="#">Pages</a>
-                    <ul class="header__menu__dropdown">
-                        <li><a href="./shop-details.ejs">Shop Details</a></li>
-                        <li><a href="./shoping-cart.ejs">Shoping Cart</a></li>
-                        <li><a href="./checkout.ejs">Check Out</a></li>
-                        <li><a href="./blog-details.ejs">Blog Details</a></li>
-                    </ul>
-                </li>
-                <li><a href="./blog.ejs">Blog</a></li>
-                <li><a href="./contact.ejs">Contact</a></li>
-            </ul>
-        </nav>
-        <div id="mobile-menu-wrap"></div>
-        <div class="header__top__right__social">
-            <a href="#"><i class="fa fa-facebook"></i></a>
-            <a href="#"><i class="fa fa-twitter"></i></a>
-            <a href="#"><i class="fa fa-linkedin"></i></a>
-            <a href="#"><i class="fa fa-pinterest-p"></i></a>
-        </div>
-        <div class="humberger__menu__contact">
-            <ul>
-                <li><i class="fa fa-envelope"></i> hello@colorlib.com</li>
-                <li>Free Shipping for all Order of $99</li>
-            </ul>
-        </div>
-    </div>
+    <%- include('../layout/humberger') %>
     <!-- Humberger End -->
 
     <!-- Header Section Begin -->
@@ -115,36 +61,39 @@
         <div class="container">
             <h2>Your Wishlist</h2>
             <% if (wishlist.length > 0) { %>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Product</th>
-                            <th>Price</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% wishlist.forEach(product => { %>
+                <form id="wishlist-form" action="/wishlist/buy-selected" method="POST">
+                    <table class="table">
+                        <thead>
                             <tr>
-                                <td>
-                                    <img src="<%= product.imageUrl %>" alt="<%= product.name %>" style="width: 50px;">
-                                    <span><%= product.name %></span>
-                                </td>
-                                <td>$<%= product.price %></td>
-                                <td>
-                                    <form action="/wishlist/remove" method="POST" style="display: inline;">
-                                        <input type="hidden" name="productId" value="<%= product.id %>">
-                                        <button type="submit" class="btn btn-danger">Remove</button>
-                                    </form>
-                                    <form action="/wishlist/buy" method="POST" style="display: inline;">
-                                        <input type="hidden" name="productId" value="<%= product.id %>">
-                                        <button type="submit" class="btn btn-success">Buy</button>
-                                    </form>
-                                </td>
+                                <th>Select</th>
+                                <th>Product</th>
+                                <th>Price</th>
+                                <th>Action</th>
                             </tr>
-                        <% }) %>
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            <% wishlist.forEach(product => { %>
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" name="selectedProducts[]" value="<%= product.id %>">
+                                    </td>
+                                    <td>
+                                        <img src="<%= product.imageUrl %>" alt="<%= product.name %>" style="width: 50px;">
+                                        <span><%= product.name %></span>
+                                    </td>
+                                    <td>$<%= product.price %></td>
+                                    <td>
+                                        <form action="/wishlist/remove" method="POST" style="display: inline;">
+                                            <input type="hidden" name="productId" value="<%= product.id %>">
+                                            <button type="submit" class="btn btn-danger">Remove</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        </tbody>
+                    </table>
+                    <button type="submit" class="btn btn-success">Buy Selected</button>
+                </form>
             <% } else { %>
                 <p>Your wishlist is empty.</p>
             <% } %>

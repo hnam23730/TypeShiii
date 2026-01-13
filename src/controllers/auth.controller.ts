@@ -19,12 +19,12 @@ class AuthController {
 
         // Gửi email cảm ơn
         const emailContent = `
-            <h1>Welcome to Our Website!</h1>
-            <p>Thank you for creating an account on our website. We're excited to have you on board!</p>
-            <p>If you have any questions, feel free to contact us at support@example.com.</p>
+            <h1>Chào mừng tới website!</h1>
+            <p>Cảm ơn bạn đã tạo tài khoản trên website của chúng tôi. Chúng tôi rất vui mừng chào đón bạn!</p>
+            <p>Nếu bạn có bất kỳ câu hỏi nào, hãy liên hệ với chúng tôi qua email support@example.com.</p>
         `;
 
-        await sendEmail(req.body.email, "Welcome to Our Website!", emailContent);
+        await sendEmail(req.body.email, "Chào mừng bạn đến với website của chúng tôi!", emailContent);
 
         // Chuyển hướng đến trang đăng nhập
         res.redirect('/login');
@@ -64,7 +64,7 @@ class AuthController {
 
     static logout(req: Request, res: Response) {
         req.session.destroy(() => {
-            res.redirect('/login');
+            res.redirect('/front');
         });
     }
 }

@@ -20,6 +20,7 @@ declare module "express-session" {
             price: number;
             image: string;
         }>;
+        
     
     }
 }

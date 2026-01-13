@@ -58,6 +58,10 @@
                                     <input type="text" class="form-control" id="imageUrl" name="imageUrl" value="<%= product.imageUrl %>" required>
                                 </div>
                                 <div class="form-group">
+                                    <label for="additionalImages">Additional Images (comma-separated URLs):</label>
+                                    <textarea id="additionalImages" name="additionalImages" rows="3" class="form-control"><%= product.additionalImages ? JSON.parse(product.additionalImages).join(", ") : "" %></textarea>
+                                </div>
+                                <div class="form-group">
                                     <label for="height">Height (cm):</label>
                                     <input type="number" id="height" name="height" step="0.01" class="form-control" value="<%= product.height %>">
                                 </div>

@@ -1,0 +1,17 @@
+# d:\tét\app-typescript\netlify.toml
+[build]
+  # Lệnh để build dự án của bạn
+  command = "npm run build"
+  # Thư mục chứa các file tĩnh (CSS, JS, images)
+  publish = "public"
+  # Thư mục chứa Netlify Functions
+  functions = "netlify/functions"
+
+[functions]
+  "server" = { node_bundler = "esbuild" }
+
+[[redirects]]
+  # Chuyển hướng tất cả các request đến function 'server'
+  from = "/*"
+  to = "/.netlify/functions/server"
+  status = 200

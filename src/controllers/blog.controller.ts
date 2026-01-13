@@ -12,6 +12,35 @@ class BlogController {
             res.status(500).send("Internal Server Error");
         }
     }
+    static async details(req: Request, res: Response) {
+        try {
+            // Chuyển đổi id từ chuỗi sang số
+            const blogId = parseInt(req.params.id, 10);
+            if (isNaN(blogId)) {
+                return res.status(400).send("Invalid blog ID");
+            }
+    
+            // Tìm bài viết theo ID
+            const blog = await AppDataSource.getRepository(Blog).findOneBy({ id: blogId });
+            if (!blog) {
+                return res.status(404).send("Blog not found");
+            }
+    
+            // Lấy các bài viết liên quan
+            const relatedBlogs = await AppDataSource.getRepository(Blog)
+                .createQueryBuilder("blog")
+                .where("blog.id != :id", { id: blogId })
+                .orderBy("blog.createdAt", "DESC")
+                .limit(3)
+                .getMany();
+    
+            // Render view và truyền dữ liệu
+            res.render("frontpage/blog-details.ejs", { blog, relatedBlogs });
+        } catch (error) {
+            console.error("Error fetching blog details:", error);
+            res.status(500).send("Internal Server Error");
+        }
+    }
 
     static async showCreateForm(req: Request, res: Response) {
         res.render("blogs/create.ejs");

@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
-import { Category } from "./Catergory";
+import { Category } from "./Category";
 
 @Entity({ name: "products" })
 export class Product {
@@ -18,6 +18,9 @@ export class Product {
     @Column()
     imageUrl: string;
 
+    @Column()
+    additionalImages: string; // Lưu danh sách ảnh phụ dưới dạng JSON
+
     @Column({ default: "In Stock" })
     availability: string;
 
@@ -27,6 +30,6 @@ export class Product {
     @Column({ nullable: true })
     shippingDetails: string;
 
-    @ManyToOne(() => Category, (category) => category.products, { nullable: true })
+    @ManyToOne(() => Category, (category) => category.products, { nullable: true, onDelete: 'SET NULL' })
     category: Category | null;
 }
