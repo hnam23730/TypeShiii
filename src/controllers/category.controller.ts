@@ -33,7 +33,13 @@ class CategoryController {
     }
     static async showEditForm(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const categoryId = parseInt(req.params.id); // Lấy ID từ URL
+            const rawId = req.params.id;
+            const idString = Array.isArray(rawId) ? rawId[0] : rawId;
+            if (!idString) {
+                res.status(400).send("Invalid category ID");
+                return;
+            }
+            const categoryId = parseInt(idString); // Lấy ID từ URL
             if (isNaN(categoryId)) {
                 res.status(400).send("Invalid category ID");
                 return;
@@ -56,7 +62,13 @@ class CategoryController {
     // Xử lý cập nhật danh mục
     static async update(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const categoryId = parseInt(req.params.id);
+            const rawId = req.params.id;
+            const idString = Array.isArray(rawId) ? rawId[0] : rawId;
+            if (!idString) {
+                res.status(404).send("Category not found");
+                return;
+            }
+            const categoryId = parseInt(idString);
             const { name } = req.body;
 
             const category = await AppDataSource.getRepository(Category).findOneBy({ id: categoryId });
@@ -77,7 +89,13 @@ class CategoryController {
     }
     static async delete(req: Request, res: Response) {
         try {
-            const categoryId = parseInt(req.params.id);
+            const rawId = req.params.id;
+            const idString = Array.isArray(rawId) ? rawId[0] : rawId;
+            if (!idString) {
+                res.status(400).send("Invalid category ID");
+                return;
+            }
+            const categoryId = parseInt(idString);
 
             // Do `onDelete: 'SET NULL'` trong Product entity,
             // database sẽ tự động cập nhật các sản phẩm liên quan về NULL.

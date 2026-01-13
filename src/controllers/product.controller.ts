@@ -21,7 +21,13 @@ class ProductController {
     }
     static async showDetails(req: Request, res: Response) {
         try {
-            const productId = parseInt(req.params.id, 10);
+            const rawId = req.params.id;
+            const idString = Array.isArray(rawId) ? rawId[0] : rawId;
+            if (!idString) {
+                res.status(400).send("Invalid product ID");
+                return;
+            }
+            const productId = parseInt(idString, 10);
 
             // Kiểm tra nếu `productId` không hợp lệ
             if (isNaN(productId) || productId < 1) {

@@ -14,8 +14,14 @@ class BlogController {
     }
     static async details(req: Request, res: Response) {
         try {
+            const rawId = req.params.id;
+            const idString = Array.isArray(rawId) ? rawId[0] : rawId;
+
+            if (!idString) {
+                return res.status(400).send("Invalid blog ID");
+            }
             // Chuyển đổi id từ chuỗi sang số
-            const blogId = parseInt(req.params.id, 10);
+            const blogId = parseInt(idString, 10);
             if (isNaN(blogId)) {
                 return res.status(400).send("Invalid blog ID");
             }

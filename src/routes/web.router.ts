@@ -150,7 +150,13 @@ router.post("/blogs/:id/edit", BlogController.update);
 router.post("/blogs/:id/delete", BlogController.delete);
 router.get("/blog-details/:id", async (req: Request, res: Response) => {
     try {
-        const blogId = parseInt(req.params.id, 10);
+        const rawId = req.params.id;
+        const idString = Array.isArray(rawId) ? rawId[0] : rawId;
+        if (!idString) {
+            res.status(400).send("Invalid blog ID");
+            return;
+        }
+        const blogId = parseInt(idString, 10);
 
         // Kiểm tra nếu `id` không phải là số hợp lệ
         if (isNaN(blogId) || blogId < 1) {
