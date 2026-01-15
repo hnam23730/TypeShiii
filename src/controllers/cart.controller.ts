@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import { AppDataSource } from "../database/data-source";
-import { Product } from "../entities/Product";
+import { AppDataSource } from "@database/data-source";
+import { Product } from "@entities/Product";
 
 class CartController {
     // Hiển thị giỏ hàng

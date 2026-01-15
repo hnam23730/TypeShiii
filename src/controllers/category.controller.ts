@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import { AppDataSource } from "../database/data-source";
-import { Category } from "../entities/Category";
+import { AppDataSource } from "@database/data-source";
+import { Category } from "@entities/Category";
 import { Product } from "@entities/Product";
 
 class CategoryController {

@@ -10,7 +10,7 @@ import apiRouter from "@routers/api.router";
 import cors from "cors";
 import path from "path";
 import { Category } from "@entities/Category";
-import passport from "./config/passport";
+import passport from "config/passport";
 import { TypeormStore } from "connect-typeorm";
 import { Session } from "@entities/Session";
 

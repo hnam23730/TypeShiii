@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { AppDataSource } from "../database/data-source";
-import { Product } from "../entities/Product";
-import { Category } from "../entities/Category";
+import { AppDataSource } from "@database/data-source";
+import { Product } from "@entities/Product";
+import { Category } from "@entities/Category";
 
 
 class ProductController {

@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { AppDataSource } from "../database/data-source";
-import { Order } from "../entities/orders";
-import { sendEmail } from "../services/email.service";
+import { AppDataSource } from "@database/data-source";
+import { Order } from "@entities/orders";
+import { sendEmail } from "@services/email.service";
 
 export class OrderController {
     static async list(req: Request, res: Response) {

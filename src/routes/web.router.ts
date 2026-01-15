@@ -1,17 +1,17 @@
 import express, { Router, Request, Response,NextFunction } from 'express';
 import HomeController from '@controllers/home.controller';
 import AuthController from '@controllers/auth.controller';
-import passport from "../config/passport"
+import passport from "config/passport";
 import UserController from '@controllers/user.controller';
-import BlogController from "../controllers/blog.controller";
+import BlogController from "@controllers/blog.controller";
 import TokenController from '@controllers/token.controller';
-import CategoryController from "../controllers/category.controller";
-import { checkAuth } from 'src/middlewares/auth.midd';
-import { checkPermission } from 'src/middlewares/permission.midd';
+import CategoryController from "@controllers/category.controller";
+import { checkAuth } from '@middlewares/auth.midd';
+import { checkPermission } from '@middlewares/permission.midd';
 import ProductController from "@controllers/product.controller";
 import CartController from "@controllers/cart.controller";
-import { AppDataSource } from "../database/data-source";
-import { Product } from "../entities/Product";
+import { AppDataSource } from "@database/data-source";
+import { Product } from "@entities/Product";
 import { Category } from '@entities/Category';
 import asyncHandler from "express-async-handler";
 import { createOrder, captureOrder } from '@services/paypal.service';
@@ -19,7 +19,7 @@ import OpenAI from "openai";
 import { OrderController } from '@controllers/OrderController';
 import { Order } from '@entities/orders';
 import WishlistController from '@controllers/wishlist.controller';
-import { Blog } from '@entities/Blog';
+import { Blog } from "@entities/Blog";
 import { sendEmail } from '@services/email.service'; // Import sendEmail
 
 

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import AuthService from '@services/auth.service';
-import { sendEmail } from "../services/email.service";
+import { sendEmail } from "@services/email.service";
 
 class AuthController {
     static showFormRegister(req: Request, res: Response) {

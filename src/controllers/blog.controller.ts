@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { AppDataSource } from "../database/data-source";
-import { Blog } from "../entities/Blog";
+import { AppDataSource } from "@database/data-source";
+import { Blog } from "@entities/Blog";
 
 class BlogController {
     static async list(req: Request, res: Response) {
