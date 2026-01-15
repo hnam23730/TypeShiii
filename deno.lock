@@ -1,0 +1,60 @@
+{
+  "version": "5",
+  "remote": {
+    "https://edge.netlify.com/": "fd941d61d88673d5f28aab283fb86fcc50f08a3bc80ee5470498fcfa88c65cfb",
+    "https://edge.netlify.com/bootstrap/config.ts": "6a2ce0e544e15e8f8883a5c18da5948e37fd0f2619f68cb31f3af53c51817025",
+    "https://edge.netlify.com/bootstrap/context.ts": "e97240232121e2f369f6546ce961490f34d961ea1ea54be3ff09633e3f08373f",
+    "https://edge.netlify.com/bootstrap/cookie.ts": "8b0baae708989ca183c6f3b4ab3d029e6abcbc2e43f93edeb0ff447b3bbc3a05",
+    "https://edge.netlify.com/bootstrap/edge_function.ts": "b8253e86aa83c67341f5cfedeba5049d77fbf84dcab7eceff7566b7728ae9b39",
+    "https://edge.netlify.com/bootstrap/globals/types.ts": "eaa6148ded3121d8dee62dd91c86e7fe76601df0f3ca8d7962243a30f4c8935f"
+  },
+  "workspace": {
+    "packageJson": {
+      "dependencies": [
+        "npm:@netlify/neon@0.1",
+        "npm:@paypal/checkout-server-sdk@^1.0.3",
+        "npm:@types/body-parser@^1.19.5",
+        "npm:@types/connect-flash@^0.0.40",
+        "npm:@types/cookie-parser@^1.4.8",
+        "npm:@types/cors@^2.8.17",
+        "npm:@types/express-session@^1.18.1",
+        "npm:@types/express@5",
+        "npm:@types/mysql@^2.15.26",
+        "npm:@types/node@^22.13.0",
+        "npm:@types/nodemailer@^6.4.17",
+        "npm:@types/passport-google-oauth20@^2.0.16",
+        "npm:@types/passport@^1.0.17",
+        "npm:@types/paypal__checkout-server-sdk@^1.0.8",
+        "npm:@types/uuid@10",
+        "npm:axios@^1.7.9",
+        "npm:body-parser@^1.20.3",
+        "npm:concurrently@^9.1.2",
+        "npm:connect-typeorm@2",
+        "npm:cors@^2.8.5",
+        "npm:cpx@^1.5.0",
+        "npm:crypto@^1.0.1",
+        "npm:dotenv@^16.4.7",
+        "npm:ejs@^3.1.10",
+        "npm:esm@^3.2.25",
+        "npm:express-async-handler@^1.2.0",
+        "npm:express-session@^1.18.1",
+        "npm:express@^4.21.2",
+        "npm:multer@^1.4.5-lts.2",
+        "npm:mysql@^2.18.1",
+        "npm:node-fetch@^2.7.0",
+        "npm:nodemailer@^6.10.0",
+        "npm:nodemon@^3.1.9",
+        "npm:openai@^4.91.1",
+        "npm:passport-google-oauth20@2",
+        "npm:passport@0.7",
+        "npm:reflect-metadata@~0.2.2",
+        "npm:ts-node@^10.9.2",
+        "npm:tsc-alias@^1.8.10",
+        "npm:tsconfig-paths@^4.2.0",
+        "npm:typeorm@~0.3.20",
+        "npm:typescript@^5.7.3",
+        "npm:uuid@^11.0.5"
+      ]
+    }
+  }
+}

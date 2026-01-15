@@ -7,13 +7,17 @@
     "start": "node dist/index.js",
     "dev": "nodemon -r tsconfig-paths/register src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "type": "module"
+    "type": "module",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "netlify dev:exec drizzle-kit migrate",
+    "db:studio": "netlify dev:exec drizzle-kit studio"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@netlify/neon": "^0.1.0",
     "@paypal/checkout-server-sdk": "^1.0.3",
     "@types/body-parser": "^1.19.5",
     "@types/connect-flash": "^0.0.40",
@@ -22,8 +26,8 @@
     "@types/express-session": "^1.18.1",
     "@types/mysql": "^2.15.26",
     "axios": "^1.7.9",
-    "connect-typeorm": "^2.0.0",
     "body-parser": "^1.20.3",
+    "connect-typeorm": "^2.0.0",
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
     "dotenv": "^16.4.7",
