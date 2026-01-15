@@ -7,6 +7,10 @@
   # Thư mục chứa Netlify Functions
   functions = "netlify/functions"
 
+[functions]
+  # Thêm các thư mục cần thiết vào function bundle
+  included_files = ["src/views/**", "public/**", "publicFP/**"]
+
 [[redirects]]
   # Chuyển hướng tất cả các request đến function 'api'
   from = "/*"
