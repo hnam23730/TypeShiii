@@ -6,28 +6,28 @@ export class Product {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
+    @Column({ type: "varchar" })
     name: string;
 
     @Column("text")
     description: string;
 
-    @Column("decimal")
+    @Column("decimal", { precision: 10, scale: 2 })
     price: number;
 
-    @Column()
+    @Column({ type: "varchar", nullable: true })
     imageUrl: string;
 
-    @Column()
+    @Column({ type: "text", nullable: true })
     additionalImages: string; // Lưu danh sách ảnh phụ dưới dạng JSON
 
-    @Column({ default: "In Stock" })
+    @Column({ type: "varchar", default: "In Stock" })
     availability: string;
 
-    @Column("decimal", { nullable: true })
+    @Column("decimal", { precision: 5, scale: 2, nullable: true })
     height: number;
 
-    @Column({ nullable: true })
+    @Column({ type: "text", nullable: true })
     shippingDetails: string;
 
     @ManyToOne(() => Category, (category) => category.products, { nullable: true, onDelete: 'SET NULL' })
