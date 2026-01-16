@@ -17,7 +17,7 @@ import { Session } from "@entities/Session";
 
 
 
-AppDataSource.initialize()
+export const appPromise = AppDataSource.initialize()
     .then(async () => {
         console.log("Data Source has been initialized!")
 
@@ -91,11 +91,19 @@ AppDataSource.initialize()
         });
         app.use(router);
         app.use("/api/v1/",apiRouter)
+        
+        return app;
+    })
+    .catch((err) => {
+        console.error("Error during Data Source initialization", err)
+        process.exit(1);
+    })
 
+if (require.main === module) {
+    appPromise.then(app => {
+        const port = process.env.PORT || 3000;
         app.listen(port, () => {
             console.log(`[server]: Server is running at http://localhost:${port}`);
         });
     })
-    .catch((err) => {
-        console.error("Error during Data Source initialization", err)
-    })
+}
