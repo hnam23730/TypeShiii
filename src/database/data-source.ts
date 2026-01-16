@@ -34,6 +34,11 @@ if (process.env.NETLIFY_DATABASE_URL) {
             // Neon requires SSL, but we can allow self-signed certs for serverless
             rejectUnauthorized: false,
         },
+        // Add this to explicitly set the SSL mode and remove the warning.
+        // 'verify-full' is the current secure behavior for 'require'.
+        extra: {
+            sslmode: 'verify-full',
+        }
     } as DataSourceOptions;
 } else {
     // Local development environment with PostgreSQL

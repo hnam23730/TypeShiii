@@ -95,8 +95,10 @@ export const appPromise = AppDataSource.initialize()
         return app;
     })
     .catch((err) => {
-        console.error("Error during Data Source initialization", err)
-        process.exit(1);
+        console.error("FATAL: Error during application startup.", err);
+        // In a serverless environment, throwing the error is better than process.exit()
+        // as it allows the platform to log the specific error.
+        throw err;
     })
 
 if (require.main === module) {
