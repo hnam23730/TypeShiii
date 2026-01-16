@@ -5,22 +5,22 @@ export class Blog {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
+    @Column({ type: "varchar" })
     title: string;
 
     @Column("text")
     content: string;
 
-    @Column()
+    @Column({ type: "varchar" })
     author: string;
 
-    @Column({ nullable: true })
+    @Column({ type: "varchar", nullable: true })
     imageUrl: string;
 
-    @Column({ nullable: true })
+    @Column({ type: "text", nullable: true })
     categories: string;
 
-    @Column({ nullable: true })
+    @Column({ type: "text", nullable: true })
     tags: string;
 
     @CreateDateColumn()

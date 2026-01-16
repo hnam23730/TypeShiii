@@ -20,13 +20,13 @@ export class Post {
     @JoinColumn({ name: "categoryId" })
     category: Category;
 
-    @Column()
+    @Column({ type: "int" })
     categoryId: number;
 
     @ManyToOne(() => User, (auth: User) => auth.posts, { onDelete: "CASCADE" })
     @JoinColumn({ name: "authId" })
     auth: User;
 
-    @Column()
+    @Column({ type: "int" })
     authId: number;
 }

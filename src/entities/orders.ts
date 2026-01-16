@@ -5,22 +5,22 @@ export class Order {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
+    @Column({ type: "varchar" })
     customerName: string;
 
-    @Column()
+    @Column({ type: "varchar" })
     customerEmail: string;
 
-    @Column()
+    @Column({ type: "varchar" })
     customerPhone: string;
 
-    @Column()
+    @Column({ type: "varchar" })
     customerAddress: string;
 
-    @Column()
+    @Column({ type: "decimal", precision: 10, scale: 2 })
     total: number;
 
-    @Column({ default: "Processing" }) // Trạng thái mặc định
+    @Column({ type: "varchar", default: "Processing" }) // Trạng thái mặc định
     status: string;
 
     @CreateDateColumn()

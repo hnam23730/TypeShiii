@@ -13,14 +13,14 @@ export class User {
     @Column({ type: "varchar" })
     password: string;
 
-    @Column({ default: true })
+    @Column({ type: "boolean", default: true })
     isActive: boolean;
 
     @ManyToOne(() => Role, (role) => role.users)
     @JoinColumn({ name: "roleId" })
     role: Role;
 
-    @Column({ nullable: true })
+    @Column({ type: "int", nullable: true })
     roleId: number;
 
     @OneToMany(() => Post, (post: Post) => post.auth)
