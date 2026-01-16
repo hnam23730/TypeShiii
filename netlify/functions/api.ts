@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import serverless from 'serverless-http';
 import { Express } from 'express';
 import { appPromise } from '../../src/index';
