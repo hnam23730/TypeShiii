@@ -10,16 +10,31 @@ import apiRouter from "@routers/api.router";
 import cors from "cors";
 import path from "path";
 import { Category } from "@entities/Category";
+import { Role } from "@entities/Role";
 import passport from "config/passport";
 import { TypeormStore } from "connect-typeorm";
 import { Session } from "@entities/Session";
 
 
 
-
 AppDataSource.initialize()
-    .then(() => {
+    .then(async () => {
         console.log("Data Source has been initialized!")
+
+        // --- Database Seeding Logic ---
+        console.log("Seeding database with initial data if necessary...");
+        const roleRepository = AppDataSource.getRepository(Role);
+        const adminRoleExists = await roleRepository.findOneBy({ id: 1 });
+        if (!adminRoleExists) {
+            console.log("Creating admin role...");
+            await roleRepository.save({ id: 1, name: "admin" });
+        }
+        const userRoleExists = await roleRepository.findOneBy({ id: 2 });
+        if (!userRoleExists) {
+            console.log("Creating user role...");
+            await roleRepository.save({ id: 2, name: "user" });
+        }
+        console.log("Seeding complete.");
 
         const app: Express = express();
         const port = process.env.PORT || 3000;
