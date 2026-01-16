@@ -3,7 +3,6 @@ dotenv.config();
 import express, { Express, NextFunction, Request, Response } from "express";
 import bodyParser from "body-parser";
 import router from "@routers/web.router";
-import "reflect-metadata";
 import { AppDataSource } from "@database/data-source";
 import session from "express-session";
 import apiRouter from "@routers/api.router";
