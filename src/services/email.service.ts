@@ -22,13 +22,6 @@ transporter.verify((error, success) => {
     }
 });
 export const sendEmail = async (to: string, subject: string, html: string) => {
-    const transporter = nodemailer.createTransport({
-        service: "gmail",
-        auth: {
-            user: process.env.EMAIL_USER, // Email của bạn
-            pass: process.env.EMAIL_PASS, // Mật khẩu ứng dụng
-        },
-    });
     try {
         const info = await transporter.sendMail({
             from: `"七十七 Shop" <${process.env.EMAIL_USER}>`, // Sender address
