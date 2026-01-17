@@ -1,4 +1,4 @@
-import TokenService from "@services/token.service";
+import TokenService from "../services/token.service";
 import { NextFunction, Request } from "express";
 
 export const checkToken = async (req: Request, res: any, next: NextFunction) => {
