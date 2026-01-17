@@ -1,5 +1,5 @@
-//import RoleService from "@services/role.service";
-import UserService from "@services/user.service";
+//import RoleService from "../../services/role.service";
+import UserService from "../../services/user.service";
 
 class UserAPIController {
     static async index(req: any, res: any) {
