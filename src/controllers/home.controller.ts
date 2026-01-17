@@ -1,5 +1,3 @@
-import WeatherService from "../services/weather.service";
-import PostService from "../services/post.service";
 import { Request, Response } from "express";
 import { AppDataSource } from "../database/data-source";
 import { User } from "../entities/User";
@@ -29,11 +27,10 @@ class HomeController {
             .select("SUM(order.total)", "total")
             .getRawOne();
 
-        const posts = await PostService.getAllPosts();
         const users = await AppDataSource.getRepository(User).find({ relations: ["role"] });
         const products = await AppDataSource.getRepository(Product).find();
 
-        res.render('home.ejs', {posts: posts, products: productCount, orders,totalRevenue: totalRevenue.total || 0,users: usersWithOrders.count || 0});
+        res.render('home.ejs', {posts: [], products: productCount, orders,totalRevenue: totalRevenue.total || 0,users: usersWithOrders.count || 0});
     }
 }
 
