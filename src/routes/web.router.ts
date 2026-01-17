@@ -26,7 +26,7 @@ import { sendEmail } from '@services/email.service'; // Import sendEmail
 
 const router: Router = express.Router();
 const fetch = require('node-fetch');
-const sendMessage = (recipientId: string, message: string) => {
+const sendMessage = async (recipientId: string, message: string) => {
     const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN; // Lấy từ biến môi trường
 
     const requestBody = {
@@ -38,7 +38,7 @@ const sendMessage = (recipientId: string, message: string) => {
         },
     };
 
-    fetch(`https://graph.facebook.com/v17.0/me/messages?access_token=${PAGE_ACCESS_TOKEN}`, {
+    await fetch(`https://graph.facebook.com/v17.0/me/messages?access_token=${PAGE_ACCESS_TOKEN}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(requestBody),
@@ -73,11 +73,11 @@ router.get("/webhook", (req: Request, res: Response) => {
     }
 });
 
-router.post("/webhook", (req: Request, res: Response) => {
+router.post("/webhook", async (req: Request, res: Response) => {
     const body = req.body;
     
     if (body.object === "page") {
-        body.entry.forEach((entry: any) => {
+        for (const entry of body.entry) {
             const webhookEvent = entry.messaging[0];
             console.log("Webhook event:", webhookEvent);
 
@@ -85,8 +85,8 @@ router.post("/webhook", (req: Request, res: Response) => {
             const message = webhookEvent.message.text;
 
             // Gửi phản hồi lại Messenger
-            sendMessage(senderId, "Cảm ơn bạn đã nhắn tin! Chúng tôi sẽ phản hồi sớm.");
-        });
+            await sendMessage(senderId, "Cảm ơn bạn đã nhắn tin! Chúng tôi sẽ phản hồi sớm.");
+        }
 
         res.status(200).send("EVENT_RECEIVED");
     } else {
@@ -221,8 +221,8 @@ router.get('/search', asyncHandler(async (req: Request, res: Response, next: Nex
 
         const products = await AppDataSource.getRepository(Product)
             .createQueryBuilder('product')
-            .where('product.name LIKE :query', { query: `%${query}%` })
-            .select(['product.id', 'product.name'])
+            .where('product.name ILIKE :query', { query: `%${query}%` })
+            .select(['product.id', 'product.name', 'product.imageUrl', 'product.price'])
             .getMany();
 
         res.json(products);
@@ -580,15 +580,22 @@ router.get("/shop.grid", async (req, res) => {
         const size = req.query.size || null; // Lọc theo kích thước
         const sort = req.query.sort || "default"; // Sắp xếp
         const page = parseInt(req.query.page as string) || 1; // Trang hiện tại
+        const searchQuery = req.query.query as string || null; // Lấy từ khóa tìm kiếm
         const limit = 12; // Số sản phẩm mỗi trang
         const offset = (page - 1) * limit;
         
         // Truy vấn sản phẩm từ cơ sở dữ liệu
         const query = AppDataSource.getRepository(Product).createQueryBuilder("product")
             .leftJoinAndSelect("product.category", "category");
+
+        // Lọc theo từ khóa tìm kiếm (nếu có)
+        if (searchQuery) {
+            query.andWhere("product.name ILIKE :searchQuery", { searchQuery: `%${searchQuery}%` });
+        }
+
         // Lọc theo danh mục
         if (category) {
-            query.where("category.name = :category", { category });
+            query.andWhere("category.name = :category", { category });
         }
 
         // Lọc theo kích thước
@@ -633,6 +640,7 @@ router.get("/shop.grid", async (req, res) => {
             selectedSort: sort,
             currentPage: page,
             totalPages,
+            searchQuery
         });
     } catch (error) {
         console.error("Error fetching shop grid:", error);

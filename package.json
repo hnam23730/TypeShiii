@@ -11,7 +11,8 @@
     "migration:generate": "npm run typeorm -- -d src/database/data-source.ts migration:generate",
     "migration:run": "npm run typeorm -- -d src/database/data-source.ts migration:run",
     "migration:revert": "npm run typeorm -- -d src/database/data-source.ts migration:revert",
-    "db:migrate:prod": "netlify dev:exec -- npm run migration:run"
+    "db:migrate:prod": "netlify dev:exec -- npm run migration:run",
+    "db:revert:prod": "netlify dev:exec -- npm run migration:revert"
   },
   "keywords": [],
   "author": "",
