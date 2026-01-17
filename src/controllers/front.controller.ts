@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { AppDataSource } from "@database/data-source";
-import { Product } from "@entities/Product";
+import { AppDataSource } from "../database/data-source";
+import { Product } from "../entities/Product";
 
 class FrontController {
     static async showFrontPage(req: Request, res: Response) {

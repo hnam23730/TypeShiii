@@ -1,4 +1,4 @@
-import TokenService from "@services/token.service";
+import TokenService from "../services/token.service";
 
 class TokenController {
     static async index(req: any, res: any): Promise<any> {

@@ -1,5 +1,5 @@
-import UserService from "@services/user.service";
-import RoleService from "@services/role.service";
+import UserService from "../services/user.service";
+import RoleService from "../services/role.service";
 import { Request, Response } from "express";
 
 class UserController {

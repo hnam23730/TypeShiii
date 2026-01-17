@@ -1,10 +1,10 @@
-import WeatherService from "@services/weather.service";
-import PostService from "@services/post.service";
+import WeatherService from "../services/weather.service";
+import PostService from "../services/post.service";
 import { Request, Response } from "express";
-import { AppDataSource } from "@database/data-source";
-import { User } from "@entities/User";
-import { Product } from "@entities/Product";
-import { Order } from "@entities/orders";
+import { AppDataSource } from "../database/data-source";
+import { User } from "../entities/User";
+import { Product } from "../entities/Product";
+import { Order } from "../entities/orders";
 class HomeController {
     static async  index(req: Request, res: Response): Promise<any> {
         // const dataAPI = await WeatherService.getCurrentWeather("Hanoi");

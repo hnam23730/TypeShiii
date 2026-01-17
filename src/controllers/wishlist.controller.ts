@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import { AppDataSource } from "@database/data-source";
-import { Product } from "@entities/Product";
+import { AppDataSource } from "../database/data-source";
+import { Product } from "../entities/Product";
 
 class WishlistController {
     // Hiển thị danh sách yêu thích
