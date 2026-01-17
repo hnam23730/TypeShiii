@@ -106,6 +106,11 @@ export const appPromise = AppDataSource.initialize()
         throw err;
     })
 
+export default async function handler(req: any, res: any) {
+    const app = await appPromise;
+    app(req, res);
+}
+
 if (require.main === module) {
     appPromise.then(app => {
         const port = process.env.PORT || 3000;
