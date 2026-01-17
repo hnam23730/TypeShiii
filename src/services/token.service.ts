@@ -1,6 +1,6 @@
-import { AppDataSource } from "@database/data-source";
-import { Token } from "@entities/Token";
-import { User } from "@entities/User";
+import { AppDataSource } from "../database/data-source";
+import { Token } from "../entities/Token";
+import { User } from "../entities/User";
 const tokenRepository = AppDataSource.getRepository(Token);
 import { v4 as uuidv4 } from 'uuid';
 import UserService from "./user.service";

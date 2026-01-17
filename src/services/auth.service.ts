@@ -1,5 +1,5 @@
-import { User } from "@entities/User";
-import { AppDataSource } from "@database/data-source";
+import { User } from "../entities/User";
+import { AppDataSource } from "../database/data-source";
 const userRepository = AppDataSource.getRepository(User);
 
 class AuthService {
