@@ -3,17 +3,17 @@ import dotenv from "dotenv";
 dotenv.config();
 import express, { Express, NextFunction, Request, Response } from "express";
 import bodyParser from "body-parser";
-import router from "@routers/web.router";
-import { AppDataSource } from "@database/data-source";
+import router from "./routes/web.router";
+import { AppDataSource } from "./database/data-source";
 import session from "express-session";
-import apiRouter from "@routers/api.router";
+import apiRouter from "./routes/api.router";
 import cors from "cors";
 import path from "path";
-import { Category } from "@entities/Category";
-import { Role } from "@entities/Role";
-import passport from "config/passport";
+import { Category } from "./entities/Category";
+import { Role } from "./entities/Role";
+import passport from "./config/passport";
 import { TypeormStore } from "connect-typeorm";
-import { Session } from "@entities/Session";
+import { Session } from "./entities/Session";
 
 
 
@@ -38,6 +38,7 @@ export const appPromise = AppDataSource.initialize()
 
         const app: Express = express();
         const port = process.env.PORT || 3000;
+        app.set("trust proxy", 1); // Quan trọng: Tin tưởng proxy của Vercel để Cookie hoạt động
         app.use(express.static(path.join(__dirname, "../public")));
         app.use(express.static(path.join(__dirname, "../publicFP")));
         app.use(cors())
@@ -58,6 +59,10 @@ export const appPromise = AppDataSource.initialize()
                 // cleanupLimit: 2, // Bị lỗi trên các phiên bản MySQL cũ. Bỏ comment nếu bạn dùng MySQL 5.7+
                 ttl: 86400 // Thời gian sống của session: 1 ngày
             }).connect(sessionRepository),
+            cookie: {
+                secure: true, // Bắt buộc true trên Vercel (HTTPS)
+                sameSite: 'none' // Giúp cookie hoạt động tốt hơn trên các trình duyệt hiện đại
+            }
         }));
 
         // Khởi tạo Passport SAU KHI session đã sẵn sàng

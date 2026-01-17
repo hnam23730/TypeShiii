@@ -1,8 +1,8 @@
 import express, { Router, Request, Response } from "express";
-import { AppDataSource } from "@database/data-source"; // Import AppDataSource
-import { Product } from "@entities/Product"; // Import entity Product
-import { checkToken } from "@middlewares/checkToken.midd";
-import UserAPIController from "@controllers/api/user.api.controller";
+import { AppDataSource } from "../database/data-source"; // Import AppDataSource
+import { Product } from "../entities/Product"; // Import entity Product
+import { checkToken } from "../middlewares/checkToken.midd";
+import UserAPIController from "../controllers/api/user.api.controller";
 
 const apiRouter: Router = express.Router();
 
