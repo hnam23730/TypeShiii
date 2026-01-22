@@ -19,7 +19,7 @@ import { createOrder, captureOrder } from '../services/paypal.service';
 import OpenAI from "openai";
 import { OrderController } from '../controllers/OrderController';
 import { Order } from '../entities/orders';
-import { OrderDetail } from '@entities/OrderDetail';
+import { OrderDetail } from '../entities/OrderDetail';
 import WishlistController from '../controllers/wishlist.controller';
 import ReviewController from '../controllers/ReviewController';
 // import { Blog } from "../entities/Blog";

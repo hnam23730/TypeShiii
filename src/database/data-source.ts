@@ -11,7 +11,7 @@ import { Role } from "../entities/Role";
 // import { Blog } from "../entities/Blog";
 import { Review } from '../entities/Review';
 import { Notification } from '../entities/Notification'; // Ensure this is imported
-import { OrderDetail } from "@entities/OrderDetail";
+import { OrderDetail } from "../entities/OrderDetail";
 
 dotenv.config();
 // Base options common to both environments
