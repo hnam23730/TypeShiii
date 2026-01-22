@@ -39,8 +39,18 @@ export const appPromise = AppDataSource.initialize()
         const app: Express = express();
         const port = process.env.PORT || 3000;
         app.set("trust proxy", 1); // Quan trọng: Trên Vercel nên để là 1 để tin tưởng proxy đầu tiên
-        app.use(express.static(path.join(__dirname, "../public")));
-        app.use(express.static(path.join(__dirname, "../publicFP")));
+        
+        // Cấu hình Cache cho file tĩnh để Vercel Edge Cache có thể lưu trữ (giảm Cache Miss)
+        const staticOptions = {
+            maxAge: '1d', // Cache ở trình duyệt 1 ngày
+            setHeaders: (res: Response, path: string) => {
+                // public: cho phép cache chung, s-maxage: thời gian cache trên CDN (Vercel)
+                res.setHeader('Cache-Control', 'public, max-age=86400, s-maxage=86400');
+            }
+        };
+        app.use(express.static(path.join(__dirname, "../public"), staticOptions));
+        app.use(express.static(path.join(__dirname, "../publicFP"), staticOptions));
+        
         app.use(cors())
         app.set("view engine", "ejs");
         app.set("views", path.join(__dirname, "views"));
@@ -61,7 +71,7 @@ export const appPromise = AppDataSource.initialize()
                 ttl: 86400 // Thời gian sống của session: 1 ngày
             }).connect(sessionRepository),
             cookie: {
-                secure: true, // Vercel luôn chạy HTTPS nên bắt buộc phải là true
+                secure: process.env.NODE_ENV === 'production', // Chỉ bật secure trên production (HTTPS), tắt khi chạy local
                 sameSite: 'lax', // 'lax' an toàn và ổn định hơn 'none' cho việc chuyển trang nội bộ
                 maxAge: 24 * 60 * 60 * 1000 // 1 ngày
             }

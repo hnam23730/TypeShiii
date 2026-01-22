@@ -41,36 +41,28 @@ class AuthController {
                 return res.redirect('/login'); // Quay lại trang đăng nhập nếu thông tin không hợp lệ
             }
     
-            // QUAN TRỌNG: Tái tạo session để xóa dữ liệu cũ và tránh xung đột
-            req.session.regenerate((err: any) => {
-                if (err) {
-                    console.error("Session regenerate error:", err);
-                    return res.status(500).send("Lỗi hệ thống khi đăng nhập");
+            // Lưu thông tin người dùng vào session
+            req.session.userLogin = {
+                id: account.id,
+                email: account.email,
+                roleId: account.roleId,
+            };
+
+            // Lưu session trước khi redirect để đảm bảo không bị mất phiên
+            req.session.save((saveErr: any) => {
+                if (saveErr) {
+                    console.error("Session save error:", saveErr);
+                    return res.status(500).send("Lỗi lưu phiên đăng nhập");
                 }
 
-                // Lưu thông tin người dùng vào session MỚI
-                req.session.userLogin = {
-                    id: account.id,
-                    email: account.email,
-                    roleId: account.roleId,
-                };
-
-                // Lưu session trước khi redirect
-                req.session.save((saveErr: any) => {
-                    if (saveErr) {
-                        console.error("Session save error:", saveErr);
-                        return res.status(500).send("Lỗi lưu phiên đăng nhập");
-                    }
-
-                    // Chuyển hướng dựa trên roleId
-                    if (account.roleId === 1) {
-                        return res.redirect('/home'); // Admin
-                    } else if (account.roleId === 2) {
-                        return res.redirect('/front'); // Người dùng
-                    } else {
-                        return res.redirect('/login'); // Trường hợp khác
-                    }
-                });
+                // Chuyển hướng dựa trên roleId (Dùng 303 để ép buộc trình duyệt dùng GET)
+                if (account.roleId === 1) {
+                    return res.redirect(303, '/home'); 
+                } else if (account.roleId === 2) {
+                    return res.redirect(303, '/front'); 
+                } else {
+                    return res.redirect(303, '/login'); 
+                }
             });
         } catch (error) {
             console.error("Error during login:", error);
@@ -79,8 +71,10 @@ class AuthController {
     }
 
     static logout(req: Request, res: Response) {
-        req.session.destroy(() => {
-            res.redirect('/front');
+        req.session.destroy((err) => {
+            if (err) console.error("Logout error:", err);
+            res.clearCookie('connect.sid'); // Xóa cookie session trên trình duyệt
+            res.redirect('/login'); // Chuyển hướng về trang đăng nhập
         });
     }
 }

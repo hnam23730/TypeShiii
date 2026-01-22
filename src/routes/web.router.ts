@@ -218,8 +218,6 @@ router.get('/register', AuthController.showFormRegister);
 router.post('/register', AuthController.register);
 router.get('/login', AuthController.showFormLogin);
 router.post('/login', AuthController.login);
-router.post('/front', AuthController.login); // Xử lý lỗi Cannot POST /front khi đăng nhập
-router.post('/home', AuthController.login); // Xử lý lỗi Cannot POST /home khi đăng nhập
 router.get('/users',checkAuth, UserController.index);
 router.post('/users', checkAuth, (req, res) => res.redirect('/users')); // Fix lỗi Cannot POST /users
 router.get('/users/create', checkAuth, checkPermission, UserController.showCreateForm);
@@ -227,7 +225,7 @@ router.post('/users/create', checkAuth, checkPermission, UserController.create);
 router.get('/users/:id/edit', checkAuth, checkPermission, UserController.showEditForm);
 router.post('/users/:id/edit', checkAuth, checkPermission, UserController.update);
 router.get('/users/:id/delete',checkAuth, checkPermission, UserController.delete);
-router.get('/logout', checkAuth, AuthController.logout);
+router.get('/logout', AuthController.logout);
 //user gì đó
 router.get(
     "/auth/google",
