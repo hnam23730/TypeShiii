@@ -41,21 +41,37 @@ class AuthController {
                 return res.redirect('/login'); // Quay lại trang đăng nhập nếu thông tin không hợp lệ
             }
     
-            // Lưu thông tin người dùng vào session
-            req.session.userLogin = {
-                id: account.id,
-                email: account.email,
-                roleId: account.roleId,
-            };
-    
-            // Chuyển hướng dựa trên roleId
-            if (account.roleId === 1) {
-                return res.redirect('/home'); // Admin
-            } else if (account.roleId === 2) {
-                return res.redirect('/front'); // Người dùng
-            } else {
-                return res.redirect('/login'); // Trường hợp khác
-            }
+            // QUAN TRỌNG: Tái tạo session để xóa dữ liệu cũ và tránh xung đột
+            req.session.regenerate((err: any) => {
+                if (err) {
+                    console.error("Session regenerate error:", err);
+                    return res.status(500).send("Lỗi hệ thống khi đăng nhập");
+                }
+
+                // Lưu thông tin người dùng vào session MỚI
+                req.session.userLogin = {
+                    id: account.id,
+                    email: account.email,
+                    roleId: account.roleId,
+                };
+
+                // Lưu session trước khi redirect
+                req.session.save((saveErr: any) => {
+                    if (saveErr) {
+                        console.error("Session save error:", saveErr);
+                        return res.status(500).send("Lỗi lưu phiên đăng nhập");
+                    }
+
+                    // Chuyển hướng dựa trên roleId
+                    if (account.roleId === 1) {
+                        return res.redirect('/home'); // Admin
+                    } else if (account.roleId === 2) {
+                        return res.redirect('/front'); // Người dùng
+                    } else {
+                        return res.redirect('/login'); // Trường hợp khác
+                    }
+                });
+            });
         } catch (error) {
             console.error("Error during login:", error);
             res.status(500).send("Lỗi máy chủ nội bộ");
