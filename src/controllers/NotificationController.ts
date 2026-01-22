@@ -19,7 +19,7 @@ class NotificationController {
 
     static async markAsRead(req: Request, res: Response, next: NextFunction) {
         try {
-            const notificationId = parseInt(req.params.id);
+            const notificationId = parseInt(Array.isArray(req.params.id) ? req.params.id[0] : req.params.id);
             const notification = await AppDataSource.getRepository(Notification).findOneBy({ id: notificationId });
             if (notification) {
                 notification.isRead = true;

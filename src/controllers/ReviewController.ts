@@ -52,7 +52,7 @@ class ReviewController {
     // Lấy tất cả đánh giá cho một sản phẩm cụ thể
     static async getReviewsByProduct(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const productId = parseInt(req.params.productId);
+            const productId = parseInt(Array.isArray(req.params.productId) ? req.params.productId[0] : req.params.productId);
 
             if (isNaN(productId)) {
                 res.status(400).json({ success: false, message: "ID sản phẩm không hợp lệ." });
@@ -90,7 +90,7 @@ class ReviewController {
     // Admin: Gửi trả lời cho một đánh giá
     static async submitAdminReply(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const reviewId = parseInt(req.params.reviewId);
+            const reviewId = parseInt(Array.isArray(req.params.reviewId) ? req.params.reviewId[0] : req.params.reviewId);
             const { reply } = req.body;
             const userLogin = (req.session as any).userLogin;
 
