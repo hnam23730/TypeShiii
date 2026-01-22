@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý Đánh giá</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css" type="text/css">
+    <style>
+        body {
+            padding-top: 20px;
+        }
+        .container {
+            max-width: 1200px;
+        }
+        .table th, .table td {
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mb-4">Quản lý Đánh giá Sản phẩm</h1>
+
+        <table class="table table-bordered table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Sản phẩm</th>
+                    <th>Người đánh giá</th>
+                    <th>Rating</th>
+                    <th>Bình luận</th>
+                    <th>Ngày tạo</th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (reviews && reviews.length > 0) { %>
+                    <% reviews.forEach(review => { %>
+                        <tr>
+                            <td><%= review.id %></td>
+                            <td><a href="/shop-details/<%= review.product.id %>" target="_blank"><%= review.product.name %></a></td>
+                            <td><%= review.user.email %></td>
+                            <td>
+                                <% for(let i = 0; i < review.rating; i++) { %>
+                                    <i class="fa fa-star text-warning"></i>
+                                <% } %>
+                                <% for(let i = 0; i < (5 - review.rating); i++) { %>
+                                    <i class="fa fa-star-o text-secondary"></i>
+                                <% } %>
+                            </td>
+                            <td><%= review.comment || 'Không có bình luận' %></td>
+                            <td><%= new Date(review.createdAt).toLocaleDateString('vi-VN') %></td>
+                            <td>
+                                <!-- Thêm nút xóa nếu cần -->
+                                <!-- <form action="/admin/reviews/<%= review.id %>/delete" method="POST" style="display:inline;">
+                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc chắn muốn xóa đánh giá này?');">Xóa</button>
+                                </form> -->
+                            </td>
+                        </tr>
+                    <% }) %>
+                <% } else { %>
+                    <tr>
+                        <td colspan="7" class="text-center">Chưa có đánh giá nào.</td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+
+    <script src="/js/jquery-3.3.1.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+</body>
+</html>

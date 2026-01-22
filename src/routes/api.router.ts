@@ -38,7 +38,7 @@ apiRouter.get("/search",async (req: any, res: any) => {
         })
         .catch((error) => {
             console.error("Error fetching products:", error);
-            res.status(500).json({ message: "Internal Server Error" });
+            res.status(500).json({ message: "Lỗi máy chủ nội bộ" });
         });
 });
 

@@ -12,5 +12,4 @@ class WeatherService {
         return data;
     }
 }
-
 export default WeatherService;

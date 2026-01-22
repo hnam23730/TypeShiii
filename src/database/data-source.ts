@@ -8,16 +8,18 @@ import { Category } from "../entities/Category";
 import { Order } from "../entities/orders";
 import { Post } from "../entities/Post";
 import { Role } from "../entities/Role";
-import { Blog } from "../entities/Blog";
+// import { Blog } from "../entities/Blog";
+import { Review } from '../entities/Review';
+import { Notification } from '../entities/Notification'; // Ensure this is imported
+import { OrderDetail } from "@entities/OrderDetail";
 
 dotenv.config();
-
 // Base options common to both environments
 const baseOptions: Partial<DataSourceOptions> = {
     type: "postgres",
-    synchronize: true, // Bật true để tự động tạo bảng giống như chạy local (Lưu ý: Cẩn thận khi có dữ liệu quan trọng)
-    logging: false,
-    entities: [User, Token, Session, Product, Category, Order, Blog, Post, Role], // Make sure all your entities are listed here
+    synchronize: false, // Bật true để tự động tạo bảng (Lưu ý: Cẩn thận khi có dữ liệu quan trọng)
+    logging: false, // Set to true for debugging TypeORM queries
+    entities: [User, Token, Session, Product, Category, Order, /*Blog,*/ Post, Role, Review, Notification, OrderDetail], // Make sure all your entities are listed here
     migrations: ["src/database/migrations/*.ts"], // Point to your migrations folder
     subscribers: [],
 };

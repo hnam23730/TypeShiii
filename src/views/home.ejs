@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Home</title>
+    <title>Trang chủ</title>
     <!-- Custom fonts for this template-->
     <link href="css/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
@@ -39,9 +39,9 @@
                 <div class="container-fluid">
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+                        <h1 class="h3 mb-0 text-gray-800">Bảng điều khiển</h1>
                     </div>
-                
+
                     <!-- Content Row -->
                     <div class="row">
                         <!-- Users Card -->
@@ -50,8 +50,8 @@
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Users Who Purchased</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><%= users %></div>
+                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Người dùng</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><%= users || 0 %></div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-users fa-2x text-gray-300"></i>
@@ -67,8 +67,8 @@
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Current Products</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><%= products %></div>
+                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Sản phẩm</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><%= products || 0 %></div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-boxes fa-2x text-gray-300"></i>
@@ -84,8 +84,8 @@
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Orders</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><%= orders %></div>
+                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Đơn hàng</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><%= orders || 0 %></div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-shopping-cart fa-2x text-gray-300"></i>
@@ -101,8 +101,8 @@
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Revenue</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">$<%= totalRevenue %></div>
+                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Doanh thu</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">$<%= totalRevenue || '0.00' %></div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -110,6 +110,122 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+
+                    <!-- Content Row for Reports and Recent Orders -->
+                    <div class="row">
+
+                        <!-- Left Column: Detailed Reports -->
+                        <div class="col-lg-8">
+                            <!-- Revenue Chart -->
+                            <!--<div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Tổng quan doanh thu (12 tháng)</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="chart-area">
+                                        <canvas id="myAreaChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>-->
+
+                            <!-- Best Selling Products Table -->
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Top sản phẩm bán chạy</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered" id="bestSellingTable" width="100%" cellspacing="0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Sản phẩm</th>
+                                                    <th>Số lượng đã bán</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <!-- Data will be loaded by JS -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Recent Orders Table (Moved & Beautified) -->
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">Đơn hàng gần đây</h6>
+                                    <a href="/order" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-arrow-right fa-sm text-white-50"></i> Xem tất cả</a>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered" id="recentOrdersTable" width="100%" cellspacing="0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Mã ĐH</th>
+                                                    <th>Khách hàng</th>
+                                                    <th>Tổng tiền</th>
+                                                    <th>Trạng thái</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr><td colspan="4" class="text-center">Đang tải dữ liệu...</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Column: Summaries and Recent Orders -->
+                        <div class="col-lg-4">
+                             <!-- Average Order Value Card -->
+                             <div class="card shadow mb-4">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Giá trị đơn hàng TB</div>
+                                            <%
+                                                let averageOrderValue = '0.00';
+                                                if (orders && Number(orders) > 0) {
+                                                    averageOrderValue = (Number(totalRevenue) / Number(orders)).toFixed(2);
+                                                }
+                                            %>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">$<%= averageOrderValue %></div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-file-invoice-dollar fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Best Selling Chart -->
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Tỉ trọng sản phẩm bán chạy</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="chart-pie pt-4 pb-2">
+                                        <canvas id="myPieChart"></canvas>
+                                    </div>
+                                    <div class="mt-4 text-center small" id="pie-chart-legend"></div>
+                                </div>
+                            </div>
+
+                            <!-- Quick Actions (Restyled) -->
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Thao tác</h6>
+                                </div>
+                                <div class="card-body">
+                                    <a href="/admin/export-revenue" class="btn btn-success btn-block">
+                                        <i class="fas fa-file-excel"></i> Xuất báo cáo doanh thu
+                                    </a>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -138,15 +254,15 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Bạn muốn đăng xuất?</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-body">Chọn "Đăng xuất" bên dưới nếu bạn muốn kết thúc phiên làm việc hiện tại.</div>
                 <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="/logout">Logout</a>
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Hủy</button>
+                    <a class="btn btn-primary" href="/logout">Đăng xuất</a>
                 </div>
             </div>
         </div>
@@ -161,6 +277,190 @@
 
     <!-- Custom scripts for all pages-->
     <script src="js/sb-admin-2.min.js"></script>
+
+    <!-- Page level plugins -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set new default font family and font color to mimic Bootstrap's default styling
+            Chart.defaults.font.family = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+            Chart.defaults.color = '#858796';
+
+            function number_format(number, decimals, dec_point, thousands_sep) {
+                number = (number + '').replace(',', '').replace(' ', '');
+                var n = !isFinite(+number) ? 0 : +number,
+                    prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
+                    sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
+                    dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
+                    s = '',
+                    toFixedFix = function(n, prec) {
+                    var k = Math.pow(10, prec);
+                    return '' + Math.round(n * k) / k;
+                    };
+                s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.');
+                if (s[0].length > 3) {
+                    s[0] = s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, sep);
+                }
+                if ((s[1] || '').length < prec) {
+                    s[1] = s[1] || '';
+                    s[1] += new Array(prec - s[1].length + 1).join('0');
+                }
+                return s.join(dec);
+            }
+
+            // Area Chart
+            async function renderAreaChart() {
+                try {
+                    const response = await fetch('/api/dashboard/revenue-chart');
+                    const data = await response.json();
+
+                    var ctx = document.getElementById("myAreaChart");
+                    var myLineChart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: data.labels,
+                            datasets: [{
+                                label: "Doanh thu",
+                                lineTension: 0.3,
+                                backgroundColor: "rgba(78, 115, 223, 0.05)",
+                                borderColor: "rgba(78, 115, 223, 1)",
+                                pointRadius: 3,
+                                pointBackgroundColor: "rgba(78, 115, 223, 1)",
+                                pointBorderColor: "rgba(78, 115, 223, 1)",
+                                pointHoverRadius: 3,
+                                pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
+                                pointHoverBorderColor: "rgba(78, 115, 223, 1)",
+                                pointHitRadius: 10,
+                                pointBorderWidth: 2,
+                                data: data.revenueData,
+                            }],
+                        },
+                        options: {
+                            maintainAspectRatio: false,
+                            scales: {
+                                x: { grid: { display: false, drawBorder: false }, ticks: { maxTicksLimit: 7 } },
+                                y: { 
+                                    ticks: {
+                                        maxTicksLimit: 5, padding: 10,
+                                        callback: function(value) { return '$' + number_format(value); }
+                                    },
+                                    grid: { color: "rgb(234, 236, 244)", zeroLineColor: "rgb(234, 236, 244)", drawBorder: false, borderDash: [2], zeroLineBorderDash: [2] }
+                                }
+                            },
+                            plugins: {
+                                legend: { display: false },
+                                tooltip: {
+                                    backgroundColor: "rgb(255,255,255)", bodyColor: "#858796", titleColor: '#6e707e',
+                                    borderColor: '#dddfeb', borderWidth: 1, displayColors: false,
+                                    callbacks: {
+                                        label: function(context) {
+                                            return context.dataset.label + ': $' + number_format(context.raw);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                } catch (e) { console.error("Could not render Area Chart", e); }
+            }
+
+            // Pie Chart
+            async function renderPieChart() {
+                try {
+                    const response = await fetch('/api/dashboard/bestselling-chart');
+                    const data = await response.json();
+                    const backgroundColors = ['#4e73df', '#1cc88a', '#36b9cc', '#f6c23e', '#e74a3b', '#858796', '#f8f9fc', '#5a5c69'];
+                    const hoverBackgroundColors = ['#2e59d9', '#17a673', '#2c9faf', '#dda20a', '#be2617', '#60616f', '#d2d3d5', '#4a4b53'];
+
+                    var ctx = document.getElementById("myPieChart");
+                    var myPieChart = new Chart(ctx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: data.labels,
+                            datasets: [{
+                                data: data.chartData,
+                                backgroundColor: backgroundColors,
+                                hoverBackgroundColor: hoverBackgroundColors,
+                                hoverBorderColor: "rgba(234, 236, 244, 1)",
+                            }],
+                        },
+                        options: {
+                            maintainAspectRatio: false,
+                            plugins: { legend: { display: false } },
+                            cutout: '80%',
+                        },
+                    });
+
+                    const legendContainer = document.getElementById('pie-chart-legend');
+                    legendContainer.innerHTML = '';
+                    data.labels.forEach((label, index) => {
+                        const color = backgroundColors[index % backgroundColors.length];
+                        legendContainer.innerHTML += `<span class="mr-2"><i class="fas fa-circle" style="color:${color}"></i> ${label}</span>`;
+                    });
+
+                    // Populate the best-selling products table
+                    const tableBody = document.querySelector('#bestSellingTable tbody');
+                    tableBody.innerHTML = '';
+                    if (data.labels.length === 0) {
+                        tableBody.innerHTML = '<tr><td colspan="2" class="text-center">Chưa có dữ liệu.</td></tr>';
+                    } else {
+                        data.labels.forEach((label, index) => {
+                            const row = `<tr><td>${label}</td><td>${data.chartData[index]}</td></tr>`;
+                            tableBody.innerHTML += row;
+                        });
+                    }
+
+                } catch (e) { console.error("Could not render Pie Chart", e); }
+            }
+
+            // Recent Orders List
+            async function renderRecentOrders() {
+                try {
+                    const response = await fetch('/api/dashboard/recent-orders');
+                    const orders = await response.json();
+                    const tableBody = document.querySelector('#recentOrdersTable tbody');
+                    tableBody.innerHTML = ''; // Clear loading text
+
+                    if (orders.length === 0) {
+                        tableBody.innerHTML = '<tr><td colspan="4" class="text-center">Không có đơn hàng nào gần đây.</td></tr>';
+                        return;
+                    }
+
+                    orders.forEach(order => {
+                        const statusMap = {
+                            'Processing': { text: 'Đang xử lý', class: 'badge badge-info' },
+                            'Shipping': { text: 'Đang giao', class: 'badge badge-primary' },
+                            'Delivered': { text: 'Đã giao', class: 'badge badge-success' },
+                            'Completed': { text: 'Hoàn thành', class: 'badge badge-success' },
+                            'Completed (VNPay)': { text: 'Hoàn thành (VNPay)', class: 'badge badge-success' },
+                            'Pending Payment (VNPay)': { text: 'Chờ thanh toán', class: 'badge badge-warning' },
+                            'Cancelled': { text: 'Đã hủy', class: 'badge badge-danger' }
+                        };
+                        const statusInfo = statusMap[order.status] || { text: order.status, class: 'badge badge-secondary' };
+
+                        const row = `
+                            <tr>
+                                <td>#${order.id}</td>
+                                <td>${order.customerName}</td>
+                                <td>$${Number(order.total).toFixed(2)}</td>
+                                <td><span class="${statusInfo.class}">${statusInfo.text}</span></td>
+                            </tr>
+                        `;
+                        tableBody.innerHTML += row;
+                    });
+                } catch (e) {
+                    console.error("Could not render Recent Orders", e);
+                    document.querySelector('#recentOrdersTable tbody').innerHTML = '<tr><td colspan="4" class="text-center text-danger">Lỗi khi tải dữ liệu.</td></tr>';
+                }
+            }
+
+            renderAreaChart();
+            renderPieChart();
+            renderRecentOrders();
+        });
+    </script>
 
 </body>
 

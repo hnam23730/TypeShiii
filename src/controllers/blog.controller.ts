@@ -9,7 +9,7 @@ class BlogController {
             res.render("blogs/list.ejs", { blogs });
         } catch (error) {
             console.error("Error fetching blogs:", error);
-            res.status(500).send("Internal Server Error");
+            res.status(500).send("Lỗi máy chủ nội bộ");
         }
     }
     static async details(req: Request, res: Response) {
@@ -18,18 +18,18 @@ class BlogController {
             const idString = Array.isArray(rawId) ? rawId[0] : rawId;
 
             if (!idString) {
-                return res.status(400).send("Invalid blog ID");
+                return res.status(400).send("ID bài viết không hợp lệ");
             }
             // Chuyển đổi id từ chuỗi sang số
             const blogId = parseInt(idString, 10);
             if (isNaN(blogId)) {
-                return res.status(400).send("Invalid blog ID");
+                return res.status(400).send("ID bài viết không hợp lệ");
             }
     
             // Tìm bài viết theo ID
             const blog = await AppDataSource.getRepository(Blog).findOneBy({ id: blogId });
             if (!blog) {
-                return res.status(404).send("Blog not found");
+                return res.status(404).send("Không tìm thấy bài viết");
             }
     
             // Lấy các bài viết liên quan
@@ -44,7 +44,7 @@ class BlogController {
             res.render("frontpage/blog-details.ejs", { blog, relatedBlogs });
         } catch (error) {
             console.error("Error fetching blog details:", error);
-            res.status(500).send("Internal Server Error");
+            res.status(500).send("Lỗi máy chủ nội bộ");
         }
     }
 
@@ -66,7 +66,7 @@ class BlogController {
             res.redirect("/blogs");
         } catch (error) {
             console.error("Error creating blog:", error);
-            res.status(500).send("Internal Server Error");
+            res.status(500).send("Lỗi máy chủ nội bộ");
         }
     }
 
@@ -74,13 +74,13 @@ class BlogController {
         try {
             const blog = await AppDataSource.getRepository(Blog).findOneBy({ id: Number(req.params.id) });
             if (!blog) {
-                res.status(404).send("Blog not found");
+                res.status(404).send("Không tìm thấy bài viết");
                 return;
             }
             res.render("blogs/edit.ejs", { blog });
         } catch (error) {
             console.error("Error fetching blog:", error);
-            res.status(500).send("Internal Server Error");
+            res.status(500).send("Lỗi máy chủ nội bộ");
         }
     }
 
@@ -97,7 +97,7 @@ class BlogController {
             res.redirect("/blogs");
         } catch (error) {
             console.error("Error updating blog:", error);
-            res.status(500).send("Internal Server Error");
+            res.status(500).send("Lỗi máy chủ nội bộ");
         }
     }
 
@@ -107,7 +107,7 @@ class BlogController {
             res.redirect("/blogs");
         } catch (error) {
             console.error("Error deleting blog:", error);
-            res.status(500).send("Internal Server Error");
+            res.status(500).send("Lỗi máy chủ nội bộ");
         }
     }
 }

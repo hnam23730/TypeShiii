@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { AppDataSource } from "../database/data-source";
 import { Category } from "../entities/Category";
+import { QueryFailedError } from "typeorm";
 import { Product } from "../entities/Product";
 
 class CategoryController {
@@ -10,7 +11,7 @@ class CategoryController {
             res.render("categories/list.ejs", { categories });
         } catch (error) {
             console.error("Error fetching categories:", error);
-            res.status(500).send("Internal Server Error");
+            res.status(500).send("Lỗi máy chủ nội bộ");
         }
     }
 
@@ -28,7 +29,7 @@ class CategoryController {
             res.redirect("/categories");
         } catch (error) {
             console.error("Error creating category:", error);
-            res.status(500).send("Internal Server Error");
+            res.status(500).send("Lỗi máy chủ nội bộ");
         }
     }
     static async showEditForm(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -36,19 +37,19 @@ class CategoryController {
             const rawId = req.params.id;
             const idString = Array.isArray(rawId) ? rawId[0] : rawId;
             if (!idString) {
-                res.status(400).send("Invalid category ID");
+                res.status(400).send("ID danh mục không hợp lệ");
                 return;
             }
             const categoryId = parseInt(idString); // Lấy ID từ URL
             if (isNaN(categoryId)) {
-                res.status(400).send("Invalid category ID");
+                res.status(400).send("ID danh mục không hợp lệ");
                 return;
             }
 
             const category = await AppDataSource.getRepository(Category).findOneBy({ id: categoryId });
 
             if (!category) {
-                res.status(404).send("Category not found");
+                res.status(404).send("Không tìm thấy danh mục");
                 return;
             }
 
@@ -65,7 +66,7 @@ class CategoryController {
             const rawId = req.params.id;
             const idString = Array.isArray(rawId) ? rawId[0] : rawId;
             if (!idString) {
-                res.status(404).send("Category not found");
+                res.status(404).send("Không tìm thấy danh mục");
                 return;
             }
             const categoryId = parseInt(idString);
@@ -74,7 +75,7 @@ class CategoryController {
             const category = await AppDataSource.getRepository(Category).findOneBy({ id: categoryId });
 
             if (!category) {
-                res.status(404).send("Category not found");
+                res.status(404).send("Không tìm thấy danh mục");
                 return;
             }
 
@@ -92,7 +93,7 @@ class CategoryController {
             const rawId = req.params.id;
             const idString = Array.isArray(rawId) ? rawId[0] : rawId;
             if (!idString) {
-                res.status(400).send("Invalid category ID");
+                res.status(400).send("ID danh mục không hợp lệ");
                 return;
             }
             const categoryId = parseInt(idString);
@@ -103,8 +104,12 @@ class CategoryController {
     
             res.redirect("/categories");
         } catch (error) {
-            console.error("Error deleting category:", error);
-            res.status(500).send("Internal Server Error");
+            console.error("Error deleting category:", error); // Ghi lại lỗi để gỡ lỗi
+            if (error instanceof QueryFailedError && (error.driverError.code === '23503' || error.driverError.code === 'ER_ROW_IS_REFERENCED_2')) {
+                // Mã lỗi cho vi phạm khóa ngoại trong PostgreSQL ('23503') và MySQL ('ER_ROW_IS_REFERENCED_2')
+                return res.status(400).send("Không thể xóa danh mục này vì vẫn còn sản phẩm thuộc về nó. Vui lòng chuyển các sản phẩm sang danh mục khác trước khi xóa.");
+            }
+            res.status(500).send("Đã xảy ra lỗi khi xóa danh mục.");
         }
     }
 }

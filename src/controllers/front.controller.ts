@@ -14,7 +14,7 @@ class FrontController {
             res.render("frontpage/front.ejs", { products });
         } catch (error) {
             console.error("Error fetching products:", error);
-            res.status(500).send("Internal Server Error");
+            res.status(500).send("Lỗi máy chủ nội bộ");
         }
     }
 }

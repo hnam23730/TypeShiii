@@ -60,8 +60,8 @@ export const appPromise = AppDataSource.initialize()
                 ttl: 86400 // Thời gian sống của session: 1 ngày
             }).connect(sessionRepository),
             cookie: {
-                secure: true, // Bắt buộc true trên Vercel (HTTPS)
-                sameSite: 'none' // Giúp cookie hoạt động tốt hơn trên các trình duyệt hiện đại
+                secure: process.env.NODE_ENV === 'production', // Chỉ bật secure trên production (HTTPS)
+                sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax' // Cấu hình sameSite phù hợp
             }
         }));
 

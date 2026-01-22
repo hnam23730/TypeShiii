@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, OneToMany } from "typeorm";
+import { OrderDetail } from "./OrderDetail";
 
 @Entity({ name: "orders" })
 export class Order {
@@ -25,4 +26,7 @@ export class Order {
 
     @CreateDateColumn()
     createdAt: Date;
+
+    @OneToMany(() => OrderDetail, orderDetail => orderDetail.order)
+    orderDetails: OrderDetail[];
 }

@@ -8,6 +8,9 @@ const transporter = nodemailer.createTransport({
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,
     },
+    tls: {
+        rejectUnauthorized: false // Giúp tránh lỗi self-signed certificate khi chạy local
+    }
     
 });
 console.log("EMAIL_HOST:", process.env.EMAIL_HOST);

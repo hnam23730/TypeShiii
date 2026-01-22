@@ -63,7 +63,7 @@
                             <span>Amongus</span>
                             <h2>Mô hình <br />100% Chất lượng</h2>
                             <p>Free Ship</p>
-                            <a href="./shop.grid" class="primary-btn">SHOP NOW</a>
+                            <a href="./shop.grid" class="primary-btn">MUA NGAY</a>
                         </div>
                     </div>
                 </div>
@@ -114,7 +114,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="section-title">
-                        <h2>Featured Products</h2>
+                        <h2>Sản phẩm nổi bật</h2>
                     </div>
                 </div>
             </div>
@@ -176,10 +176,11 @@
                 <!-- Latest Products -->
                 <div class="col-lg-4 col-md-6">
                     <div class="latest-product__text">
-                        <h4>Latest Products</h4>
+                        <h4>Sản phẩm mới nhất</h4>
                         <div class="latest-product__slider owl-carousel">
                             <div class="latest-prdouct__slider__item">
-                                <% products.forEach((product, index) => { %>
+                                <% if (latestProducts && latestProducts.length > 0) { %>
+                                <% latestProducts.forEach((product, index) => { %>
                                     <% if (index > 0 && index % 3 === 0) { %>
                                         </div><div class="latest-prdouct__slider__item">
                                     <% } %>
@@ -193,6 +194,7 @@
                                         </div>
                                     </a>
                                 <% }) %>
+                                <% } %>
                             </div>
                         </div>
                     </div>
@@ -201,10 +203,11 @@
                 <!-- Top Rated Products -->
                 <div class="col-lg-4 col-md-6">
                     <div class="latest-product__text">
-                        <h4>Top Rated Products</h4>
+                        <h4>Đánh giá cao</h4>
                         <div class="latest-product__slider owl-carousel">
                             <div class="latest-prdouct__slider__item">
-                                <% products.forEach((product, index) => { %>
+                                <% if (topRatedProducts && topRatedProducts.length > 0) { %>
+                                <% topRatedProducts.forEach((product, index) => { %>
                                     <% if (index > 0 && index % 3 === 0) { %>
                                         </div><div class="latest-prdouct__slider__item">
                                     <% } %>
@@ -218,6 +221,9 @@
                                         </div>
                                     </a>
                                 <% }) %>
+                                <% } else { %>
+                                    <p>Chưa có sản phẩm nào được đánh giá.</p>
+                                <% } %>
                             </div>
                         </div>
                     </div>
@@ -226,10 +232,11 @@
                 <!-- Review Products -->
                 <div class="col-lg-4 col-md-6">
                     <div class="latest-product__text">
-                        <h4>Review Products</h4>
+                        <h4>Bán chạy nhất</h4>
                         <div class="latest-product__slider owl-carousel">
                             <div class="latest-prdouct__slider__item">
-                                <% products.forEach((product, index) => { %>
+                                <% if (mostViewedProducts && mostViewedProducts.length > 0) { %>
+                                <% mostViewedProducts.forEach((product, index) => { %>
                                     <% if (index > 0 && index % 3 === 0) { %>
                                         </div><div class="latest-prdouct__slider__item">
                                     <% } %>
@@ -243,6 +250,9 @@
                                         </div>
                                     </a>
                                 <% }) %>
+                                <% } else { %>
+                                    <p>Chưa có sản phẩm bán chạy.</p>
+                                <% } %>
                             </div>
                         </div>
                     </div>
@@ -259,11 +269,11 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="section-title from-blog__title">
-                        <h2>From The Blog</h2>
+                        <!--<h2>Tin tức</h2>-->
                     </div>
                 </div>
             </div>
-            <!-- <div class="row">
+            <!--<div class="row">
                 <div class="col-lg-4 col-md-4 col-sm-6">
                     <div class="blog__item">
                         <div class="blog__item__pic">
@@ -309,7 +319,7 @@
                         </div>
                     </div>
                 </div>
-            </div> -->
+            </div>-->
         </div>
     </section>
     <!-- Blog Section End -->
@@ -344,17 +354,10 @@
                     .then(data => {
                     console.log(data);
                         if (data.success) {
-                            // Cập nhật số lượng sản phẩm trong icon giỏ hàng
-                            const cartQuantityElement = document.querySelector('.header__cart ul li:nth-child(2) span');
-                            cartQuantityElement.textContent = data.totalQuantity;
-    
-                            // Cập nhật tổng tiền trong giỏ hàng
-                            const cartPriceElement = document.querySelector('.header__cart__price span');
-                            cartPriceElement.textContent = `$${data.totalPrice.toFixed(2)}`;
-    
-                            alert(data.message || 'Sản phẩm đã được thêm vào giỏ hàng!');
+                            alert(data.message);
+                        window.location.reload();
                         } else {
-                           alert(data.message || 'Bạn cần đăng nhập để thêm sản phẩm vào giỏ hàng.');
+                           alert(data.message);
                         }
                     })
                     .catch(error => console.error('Error:', error));
@@ -389,11 +392,11 @@
                         if (data.success) {
                             // Cập nhật số lượng sản phẩm trong icon wishlist
                             const wishlistCountElement = document.querySelector('.header__cart ul li:nth-child(1) span');
-                            wishlistCountElement.textContent = data.totalWishlist;
+                            if (wishlistCountElement) wishlistCountElement.textContent = data.wishlistCount;
     
-                            alert('Product added to wishlist successfully!');
+                            alert(data.message);
                         } else {
-                            alert(data.error || 'Failed to add product to wishlist');
+                            alert(data.message);
                         }
                     })
                     .catch(error => console.error('Error:', error));

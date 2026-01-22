@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order Success</title>
+    <title>Đặt hàng thành công</title>
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;900&display=swap" rel="stylesheet">
@@ -25,17 +25,16 @@
 
     <section class="order-success spad">
         <div class="container text-center">
-            <h1>Thank you for your order!</h1>
-            <p>Your payment was successful.</p>
-            <h3>Order Details:</h3>
-            <ul>
-                <% if (order.purchase_units) { %>
-                    <% order.purchase_units.forEach(unit => { %>
-                        <li><strong>Amount:</strong> $<%= unit.amount.value %></li>
-                    <% }) %>
-                <% } %>
-            </ul>
-            <a href="/shop.grid" class="site-btn">Continue Shopping</a>
+            <h1>Cảm ơn vì đã mua hàng</h1>
+            <p>Thanh toán của bạn đã thành công.</p>
+            <% if (order) { %>
+                <h3>Chi tiết đơn hàng của bạn:</h3>
+                <p><strong>Mã đơn hàng:</strong> #<%= order.id %></p>
+                <p><strong>Khách hàng:</strong> <%= order.customerName %></p>
+                <p><strong>Tổng cộng:</strong> $<%= Number(order.total).toFixed(2) %></p>
+                <p>Chúng tôi đã gửi một email xác nhận đến <strong><%= order.customerEmail %></strong>.</p>
+            <% } %>
+            <a href="/shop.grid" class="site-btn">Tiếp tục mua sắm</a>
         </div>
     </section>
 

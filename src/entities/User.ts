@@ -2,6 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, OneToMan
 import { Role } from "./Role";
 import { Post } from "./Post";
 import { Token } from "./Token";
+import { Review } from "./Review";
 @Entity({ name: "users" })
 export class User {
     @PrimaryGeneratedColumn()
@@ -28,5 +29,8 @@ export class User {
     
     @OneToMany(() => Token, (token: Token) => token.user)
     tokens?: Token[]
+
+    @OneToMany(() => Review, review => review.user)
+    reviews: Review[];
 
 }

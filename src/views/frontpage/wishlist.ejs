@@ -59,23 +59,23 @@
 
     <section class="wishlist">
         <div class="container">
-            <h2>Your Wishlist</h2>
+            <h2>Danh sách yêu thích</h2>
             <% if (wishlist.length > 0) { %>
-                <form id="wishlist-form" action="/wishlist/buy-selected" method="POST">
+                <form id="buy-selected-form" action="/wishlist/buy-selected" method="POST"></form>
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>Select</th>
-                                <th>Product</th>
-                                <th>Price</th>
-                                <th>Action</th>
+                                <th>Chọn</th>
+                                <th>Sản phẩm</th>
+                                <th>Giá</th>
+                                <th>Hành động</th>
                             </tr>
                         </thead>
                         <tbody>
                             <% wishlist.forEach(product => { %>
                                 <tr>
                                     <td>
-                                        <input type="checkbox" name="selectedProducts[]" value="<%= product.id %>">
+                                        <input type="checkbox" name="selectedProducts" value="<%= product.id %>" form="buy-selected-form">
                                     </td>
                                     <td>
                                         <img src="<%= product.imageUrl %>" alt="<%= product.name %>" style="width: 50px;">
@@ -85,17 +85,16 @@
                                     <td>
                                         <form action="/wishlist/remove" method="POST" style="display: inline;">
                                             <input type="hidden" name="productId" value="<%= product.id %>">
-                                            <button type="submit" class="btn btn-danger">Remove</button>
+                                            <button type="submit" class="btn btn-danger">Xóa</button>
                                         </form>
                                     </td>
                                 </tr>
                             <% }) %>
                         </tbody>
                     </table>
-                    <button type="submit" class="btn btn-success">Buy Selected</button>
-                </form>
+                    <button type="submit" class="btn btn-success" form="buy-selected-form">Mua sản phẩm đã chọn</button>
             <% } else { %>
-                <p>Your wishlist is empty.</p>
+                <p>Danh sách yêu thích của bạn đang trống.</p>
             <% } %>
         </div>
     </section>
@@ -129,11 +128,9 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        // Hiển thị thông báo thành công
-                        alert(data.message || 'Product added to wishlist!');
+                        alert(data.message);
                     } else {
-                        // Hiển thị thông báo lỗi
-                        alert(data.message || 'Failed to add product to wishlist.');
+                        alert(data.message);
                     }
                 })
                 .catch(error => console.error('Error:', error));

@@ -30,7 +30,7 @@ class AuthController {
         res.redirect('/login');
     } catch (error) {
         console.error("Error during registration:", error);
-        res.status(500).send("Internal Server Error");
+        res.status(500).send("Lỗi máy chủ nội bộ");
     }
     }
 
@@ -58,7 +58,7 @@ class AuthController {
             }
         } catch (error) {
             console.error("Error during login:", error);
-            res.status(500).send("Internal Server Error");
+            res.status(500).send("Lỗi máy chủ nội bộ");
         }
     }
 

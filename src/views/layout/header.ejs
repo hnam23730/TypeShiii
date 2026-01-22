@@ -6,27 +6,13 @@
                     <div class="header__top__left">
                         <ul>
                             <li><i class="fa fa-envelope"></i> hnam36360@gmail.com</li>
-                            <li>Free Ship nếu có tiền trả Ship</li>
+                            <li>Miễn phí vận chuyển</li>
                         </ul>
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-6">
                     <div class="header__top__right">
-                        <div class="header__top__right__social">
-                            <a href="#"><i class="fa fa-facebook"></i></a>
-                            <a href="#"><i class="fa fa-twitter"></i></a>
-                            <a href="#"><i class="fa fa-linkedin"></i></a>
-                            <a href="#"><i class="fa fa-pinterest-p"></i></a>
-                        </div>
-                        <div class="header__top__right__language">
-                            <img src="img/language.png" alt="">
-                            <div>English</div>
-                            <span class="arrow_carrot-down"></span>
-                            <ul>
-                                <li><a href="#">Vietnamese</a></li>
-                                <li><a href="#">English</a></li>
-                            </ul>
-                        </div>
+                        
                         <div class="header__top__right__auth">
                             <% if (userLogin) { %>
                                 <div class="dropdown">
@@ -34,12 +20,12 @@
                                         <i class="fa fa-user"></i> <%= userLogin.email %>
                                     </a>
                                     <ul class="dropdown-menu" aria-labelledby="userDropdown">
-                                        <li><a class="dropdown-item" href="#">Profile</a></li>
-                                        <li><a class="dropdown-item" href="/logout">Logout</a></li>
+                                        <!--<li><a class="dropdown-item" href="#">Hồ sơ</a></li>-->
+                                        <li><a class="dropdown-item" href="/logout">Đăng xuất</a></li>
                                     </ul>
                                 </div>
                             <% } else { %>
-                                <a href="/login"><i class="fa fa-user"></i> Login</a>
+                                <a href="/login"><i class="fa fa-user"></i> Đăng nhập</a>
                             <% } %>
                         </div>
                     </div>
@@ -57,8 +43,8 @@
             <div class="col-lg-6">
                 <nav class="header__menu">
                     <ul>
-                        <li class="active"><a href="/front">Home</a></li>
-                        <li><a href="/shop.grid">Shop</a></li>
+                        <li class="active"><a href="/front">Trang chủ</a></li>
+                        <li><a href="/shop.grid">Cửa hàng</a></li>
                         <!-- <li><a href="#">Pages</a>
                             <ul class="header__menu__dropdown"> -->
                                 <!-- <li><a href="./shop-details">Shop Details</a></li> -->
@@ -67,8 +53,8 @@
                                 <!-- <li><a href="/blog-details">Blog Details</a></li>
                             </ul>
                         </li> -->
-                        <li><a href="/blog">Blog</a></li>
-                        <li><a href="/contact">Contact</a></li>
+                        <!--<li><a href="/blog">Blog</a></li>-->
+                        <li><a href="/contact">Liên hệ</a></li>
                     </ul>
                 </nav>
             </div>

@@ -16,7 +16,7 @@ class ProductController {
             res.render("products/list.ejs", { products });
         } catch (error) {
             console.error("Error fetching products:", error);
-            res.status(500).send("Internal Server Error");
+            res.status(500).send("Lỗi máy chủ nội bộ");
         }
     }
     static async showDetails(req: Request, res: Response) {
@@ -24,7 +24,7 @@ class ProductController {
             const rawId = req.params.id;
             const idString = Array.isArray(rawId) ? rawId[0] : rawId;
             if (!idString) {
-                res.status(400).send("Invalid product ID");
+                res.status(400).send("ID sản phẩm không hợp lệ");
                 return;
             }
             const productId = parseInt(idString, 10);
@@ -32,7 +32,7 @@ class ProductController {
             // Kiểm tra nếu `productId` không hợp lệ
             if (isNaN(productId) || productId < 1) {
                 console.error("Invalid product ID:", req.params.id);
-                res.status(400).send("Invalid product ID");
+                res.status(400).send("ID sản phẩm không hợp lệ");
                 return;
             }
 
@@ -44,7 +44,7 @@ class ProductController {
                 .getOne();
 
             if (!product) {
-                res.status(404).send("Product not found");
+                res.status(404).send("Không tìm thấy sản phẩm");
                 return;
             }
 
@@ -61,7 +61,7 @@ class ProductController {
             res.render("frontpage/shop-details.ejs", { product, relatedProducts });
         } catch (error) {
             console.error("Error fetching product details:", error);
-            res.status(500).send("Internal Server Error");
+            res.status(500).send("Lỗi máy chủ nội bộ");
         }
     }
 

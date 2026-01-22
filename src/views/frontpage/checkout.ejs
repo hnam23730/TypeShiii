@@ -63,44 +63,44 @@
             <div class="row">
             </div>
             <div class="checkout__form">
-                <h4>Billing Details</h4>
+                <h4>Thông tin thanh toán</h4>
                 <form id="checkout-form" action="/checkout" method="POST">
                     <div class="row">
                         <div class="col-lg-8 col-md-6">
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="checkout__input">
-                                        <p>First Name<span>*</span></p>
+                                        <p>Tên<span>*</span></p>
                                         <input type="text" name="firstName" id="firstName" required>
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="checkout__input">
-                                        <p>Last Name<span>*</span></p>
+                                        <p>Họ<span>*</span></p>
                                         <input type="text" name="lastName" id="lastName" required>
                                     </div>
                                 </div>
                             </div>
                             <div class="checkout__input">
-                                <p>Country<span>*</span></p>
+                                <p>Quốc gia<span>*</span></p>
                                 <input type="text" name="country" id="country" required>
                             </div>
                             <div class="checkout__input">
-                                <p>Address<span>*</span></p>
-                                <input type="text" name="address" id="address" placeholder="Street Address" required>
+                                <p>Địa chỉ<span>*</span></p>
+                                <input type="text" name="address" id="address" placeholder="Địa chỉ nhà" required>
                             </div>
                             <div class="checkout__input">
-                                <p>Town/City<span>*</span></p>
+                                <p>Thành phố/Thị xã<span>*</span></p>
                                 <input type="text" name="city" id="city" required>
                             </div>
                             <div class="checkout__input">
-                                <p>Postcode / ZIP<span>*</span></p>
+                                <p>Mã bưu điện<span>*</span></p>
                                 <input type="text" name="zip" id="zip" required>
                             </div>
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="checkout__input">
-                                        <p>Phone<span>*</span></p>
+                                        <p>Số điện thoại<span>*</span></p>
                                         <input type="text" name="phone" id="phone" required>
                                     </div>
                                 </div>
@@ -114,31 +114,38 @@
                         </div>
                         <div class="col-lg-4 col-md-6">
                             <div class="checkout__order">
-                                <h4>Your Order</h4>
-                                <div class="checkout__order__products">Products <span>Total</span></div>
+                                <h4>Đơn hàng của bạn</h4>
+                                <div class="checkout__order__products">Sản phẩm <span>Tổng cộng</span></div>
                                 <ul id="order-summary">
                                     <% shopingCart.forEach(product => { %>
                                         <li><%= product.name %> <span>$<%= (product.price * product.quantity).toFixed(2) %></span></li>
                                     <% }) %>
                                 </ul>
                                 <div class="checkout__order__total" id="order-summary" data-total="<%= total %>">
-                                    Total <span>$<%= total.toFixed(2) %></span>
+                                    Tổng cộng <span>$<%= total.toFixed(2) %></span>
                                 </div>
                                 <div class="checkout__input__checkbox">
                                     <label for="paypal">
-                                        Pay in cash
+                                        Thanh toán tiền mặt
                                         <input type="radio" id="paypal" name="paymentMethod" value="cash">
                                         <span class="checkmark"></span>
                                     </label>
                                 </div>
-                                <div class="checkout__input__checkbox">
+                                <!-- <div class="checkout__input__checkbox">
                                     <label for="online-payment">
-                                        Online payment (PayPal)
+                                        Thanh toán trực tuyến (PayPal)
                                         <input type="radio" id="online-payment" name="paymentMethod" value="paypal">
                                         <span class="checkmark"></span>
                                     </label>
+                                </div> -->
+                                <div class="checkout__input__checkbox">
+                                    <label for="vnpay-payment">
+                                        Thanh toán VNPay
+                                        <input type="radio" id="vnpay-payment" name="paymentMethod" value="vnpay">
+                                        <span class="checkmark"></span>
+                                    </label>
                                 </div>
-                                <button type="submit" class="site-btn">PLACE ORDER</button>
+                                <button type="submit" class="site-btn">ĐẶT HÀNG</button>
                             </div>
                         </div>
                     </div>
@@ -164,34 +171,40 @@
     <script>
                 document.getElementById("checkout-form").addEventListener("submit", function (event) {
                 event.preventDefault();
+                
+                // const onlinePaymentChecked = document.getElementById("online-payment").checked;
+                const vnpayChecked = document.getElementById("vnpay-payment").checked;
 
-                const onlinePaymentChecked = document.getElementById("online-payment").checked;
+                // if (onlinePaymentChecked) {
+                //     let total = parseFloat(document.getElementById('order-summary').getAttribute('data-total'));
 
-                if (onlinePaymentChecked) {
-                    let total = parseFloat(document.getElementById('order-summary').getAttribute('data-total'));
+                //     // Nếu total không hợp lệ, đặt giá trị mặc định
+                //     if (isNaN(total) || total <= 0) {
+                //         console.warn("Total is invalid. Setting default value.");
+                //         total = 1.00; // Giá trị mặc định
+                //     }
 
-                    // Nếu total không hợp lệ, đặt giá trị mặc định
-                    if (isNaN(total) || total <= 0) {
-                        console.warn("Total is invalid. Setting default value.");
-                        total = 1.00; // Giá trị mặc định
-                    }
-
-                    // Gửi yêu cầu đến API PayPal
-                    fetch("/api/payment/paypal/create", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ total }),
-                    })
-                        .then((response) => response.json())
-                        .then((data) => {
-                            if (data.id) {
-                                window.location.href = `https://www.sandbox.paypal.com/checkoutnow?token=${data.id}`;
-                            } else {
-                                alert("Failed to create PayPal order.");
-                            }
-                        })
-                        .catch((error) => console.error("Error:", error));
+                //     // Gửi yêu cầu đến API PayPal
+                //     fetch("/api/payment/paypal/create", {
+                //         method: "POST",
+                //         headers: { "Content-Type": "application/json" },
+                //         body: JSON.stringify({ total }),
+                //     })
+                //         .then((response) => response.json())
+                //         .then((data) => {
+                //             if (data.id) {
+                //                 window.location.href = `https://www.sandbox.paypal.com/checkoutnow?token=${data.id}`;
+                //             } else {
+                //                 alert("Không thể tạo đơn hàng PayPal.");
+                //             }
+                //         })
+                //         .catch((error) => console.error("Error:", error));
+                // } else 
+                if (vnpayChecked) {
+                    this.action = "/checkout/vnpay";
+                    this.submit();
                 } else {
+                    this.action = "/checkout";
                     this.submit();
                 }
             });

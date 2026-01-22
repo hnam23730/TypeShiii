@@ -8,29 +8,27 @@
                         <a href="/front"><img src="img/logo_3.png" alt=""></a>
                     </div>
                     <ul>
-                        <li>Address: 235 Hoàng Quốc Việt, Cổ Nhuế, Bắc Từ Liêm, Hà Nội, Việt Nam</li>
-                        <li>Phone: +84386604992</li>
+                        <li>Địa chỉ: 235 Hoàng Quốc Việt, Cổ Nhuế, Bắc Từ Liêm, Hà Nội, Việt Nam</li>
+                        <li>Điện thoại: +84386604992</li>
                         <li>Email: hnam36360@gmail.com</li>
                     </ul>
                 </div>
             </div>
             <div class="col-lg-4 col-md-6 col-sm-6 offset-lg-1">
                 <div class="footer__widget">
-                    <h6>Links</h6>
+                    <h6>Liên kết</h6>
                     <ul>
-                        <li><a href="#">Về chúng tôi</a></li>
-                        <li><a href="#">Về cửa hàng</a></li>
-                        <li><a href="#">Chính sách</a></li>
+                        <li><a href="/about">Về cửa hàng</a></li>
                         <li><a href="/contact">Liên hệ</a></li>
                     </ul>
                 </div>
             </div>
             <div class="col-lg-4 col-md-12">
                 <div class="footer__widget">
-                    <h6>Chỗ gửi Email gì đấy</h6>
-                    <p>Ăn may thì được code giảm giá hoặc không.</p>
-                    <form action="#">
-                        <input type="text" placeholder="Enter your mail">
+                    <h6>Đăng ký nhận tin</h6>
+                    <p>Đăng ký để nhận thông tin khuyến mãi mới nhất.</p>
+                    <form id="newsletter-form">
+                        <input type="email" name="email" placeholder="Nhập email của bạn" required>
                         <button type="submit" class="site-btn">Đăng ký</button>
                     </form>
                     <div class="footer__widget__social">
@@ -46,7 +44,7 @@
             <div class="col-lg-12">
                 <div class="footer__copyright">
                     <div class="footer__copyright__text"><p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+Bản quyền &copy;<script>document.write(new Date().getFullYear());</script> Đã đăng ký bản quyền | Mẫu web được làm bởi <i class="fa fa-heart" aria-hidden="true"></i> <a href="https://colorlib.com" target="_blank">Colorlib</a>
 <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p></div>
                     <div class="footer__copyright__payment"><img src="img/payment-item.png" alt=""></div>
                 </div>
@@ -54,3 +52,31 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
         </div>
     </div>
 </footer>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const newsletterForm = document.getElementById('newsletter-form');
+        if (newsletterForm) {
+            newsletterForm.addEventListener('submit', async function(event) {
+                event.preventDefault();
+                const emailInput = newsletterForm.querySelector('input[name="email"]');
+                const email = emailInput.value;
+
+                try {
+                    const response = await fetch('/subscribe-newsletter', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email: email })
+                    });
+                    const data = await response.json();
+                    alert(data.message);
+                    if (data.success) {
+                        emailInput.value = ''; // Xóa nội dung input sau khi gửi thành công
+                    }
+                } catch (error) {
+                    console.error('Lỗi:', error);
+                    alert('Đã có lỗi xảy ra. Vui lòng thử lại.');
+                }
+            });
+        }
+    });
+</script>

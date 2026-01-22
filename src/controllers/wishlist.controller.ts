@@ -17,7 +17,7 @@ class WishlistController {
             const product = await AppDataSource.getRepository(Product).findOneBy({ id: parseInt(productId) });
     
             if (!product) {
-                res.status(404).json({ success: false, message: "Product not found" });
+                res.status(404).json({ success: false, message: "Không tìm thấy sản phẩm" });
                 return;
             }
     
@@ -25,18 +25,20 @@ class WishlistController {
     
             // Kiểm tra nếu sản phẩm đã tồn tại trong danh sách yêu thích
             const existingItem = wishlist.find((item: any) => item.id === product.id);
-            if (!existingItem) {
-                // Thêm sản phẩm mới vào danh sách yêu thích
-                wishlist.push({
-                    id: product.id,
-                    name: product.name,
-                    price: product.price,
-                    imageUrl: product.imageUrl,
-                });
+            if (existingItem) {
+                res.json({ success: false, message: "Sản phẩm đã có trong danh sách yêu thích." });
+                return;
             }
     
+            // Thêm sản phẩm mới vào danh sách yêu thích
+            wishlist.push({
+                id: product.id,
+                name: product.name,
+                price: product.price,
+                imageUrl: product.imageUrl,
+            });
             (req.session as any).wishlist = wishlist; // Lưu danh sách yêu thích vào session
-            res.json({ success: true, message: "Product added to wishlist" });
+            res.json({ success: true, message: "Sản phẩm đã được thêm vào danh sách yêu thích", wishlistCount: wishlist.length });
        
         } catch (error) {
             console.error("Error adding to wishlist:", error);
@@ -52,7 +54,7 @@ class WishlistController {
             const productIndex = wishlist.findIndex((item: any) => item.id === parseInt(productId));
 
             if (productIndex === -1) {
-                res.status(404).json({ success: false, message: "Product not found in wishlist" });
+                res.status(404).json({ success: false, message: "Sản phẩm không có trong danh sách yêu thích" });
                 return;
             }
 

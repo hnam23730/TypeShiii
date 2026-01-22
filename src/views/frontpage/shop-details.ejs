@@ -86,7 +86,7 @@
                                         <input type="number" name="quantity" value="1" min="1">
                                     </div>
                                 </div>
-                                <button type="button" class="primary-btn add-to-cart-btn" data-product-id="<%= product.id %>">ADD TO CART</button>
+                                <button type="button" class="primary-btn add-to-cart-btn" data-product-id="<%= product.id %>">THÊM VÀO GIỎ</button>
                             </form>
                         </div>
                         
@@ -95,9 +95,9 @@
                             <i class="icon_heart_alt"></i>
                         </a>
                         <ul>
-                            <li><b>Availability:</b> <span><%= product.availability %></span></li>
-                            <li><b>Height:</b> <span><%= product.height ? product.height + "cm" : "N/A" %></span></li>
-                            <li><b>Category:</b> <span><%= product.category ? product.category.name : "Uncategorized" %></span></li>
+                            <li><b>Tình trạng:</b> <span><%= product.availability %></span></li>
+                            <li><b>Chiều cao:</b> <span><%= product.height ? product.height + "cm" : "N/A" %></span></li>
+                            <li><b>Danh mục:</b> <span><%= product.category ? product.category.name : "Chưa phân loại" %></span></li>
                         </ul>
                     </div>
                 </div>
@@ -105,25 +105,50 @@
                     <div class="product__details__tab">
                         <ul class="nav nav-tabs" role="tablist">
                             <li class="nav-item">
-                                <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab"
-                                    aria-selected="true">Description</a>
+                                <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab" aria-selected="true">Thông tin</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab"
-                                    aria-selected="false">Information</a>
+                                <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab" aria-selected="false">Đánh giá (<span id="review-count">0</span>)</a>
                             </li>
                         </ul>
                         <div class="tab-content">
                             <div class="tab-pane active" id="tabs-1" role="tabpanel">
                                 <div class="product__details__tab__desc">
-                                    <h6>Products Infomation</h6>
                                     <p><%= product.description %></p>
                                 </div>
                             </div>
-                            <div class="tab-pane" id="tabs-2" role="tabpanel">
+
+                            <div class="tab-pane" id="tabs-3" role="tabpanel" data-product-id="<%= product.id %>">
                                 <div class="product__details__tab__desc">
-                                    <h6>Products Infomation</h6>
-                                    <p><%= product.description %></p>
+                                    <h6>Đánh giá sản phẩm</h6>
+                                    <div id="reviews-list">
+                                        <!-- Reviews will be loaded here by JavaScript -->
+                                        <p>Chưa có đánh giá nào cho sản phẩm này.</p>
+                                    </div>
+                                    <% if (userLogin) { %>
+                                        <div class="review-form mt-4">
+                                            <h5>Gửi đánh giá của bạn</h5>
+                                            <form id="submit-review-form">
+                                                <div class="form-group">
+                                                    <label for="rating">Đánh giá sao:</label>
+                                                    <div class="rating-stars">
+                                                        <input type="radio" id="star5" name="rating" value="5" required><label for="star5" title="5 sao"></label>
+                                                        <input type="radio" id="star4" name="rating" value="4"><label for="star4" title="4 sao"></label>
+                                                        <input type="radio" id="star3" name="rating" value="3"><label for="star3" title="3 sao"></label>
+                                                        <input type="radio" id="star2" name="rating" value="2"><label for="star2" title="2 sao"></label>
+                                                        <input type="radio" id="star1" name="rating" value="1"><label for="star1" title="1 sao"></label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group mt-3">
+                                                    <label for="comment">Bình luận:</label>
+                                                    <textarea class="form-control" id="comment" name="comment" rows="3"></textarea>
+                                                </div>
+                                                <button type="submit" class="site-btn mt-3">Gửi đánh giá</button>
+                                            </form>
+                                        </div>
+                                    <% } else { %>
+                                        <p class="mt-4">Vui lòng <a href="/login">đăng nhập</a> để gửi đánh giá.</p>
+                                    <% } %>
                                 </div>
                             </div>
                         </div>
@@ -140,7 +165,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="section-title related__product__title">
-                        <h2>Related Products</h2>
+                        <h2>Sản phẩm liên quan</h2>
                     </div>
                 </div>
             </div>
@@ -164,7 +189,7 @@
                         </div>
                     <% }) %>
                 <% } else { %>
-                    <p>No related products found.</p>
+                    <p>Không tìm thấy sản phẩm liên quan.</p>
                 <% } %>
             </div>
         </div>
@@ -202,17 +227,10 @@
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
-                            // Cập nhật số lượng sản phẩm trong icon giỏ hàng
-                            const cartQuantityElement = document.querySelector('.header__cart ul li:nth-child(2) span');
-                            cartQuantityElement.textContent = data.totalQuantity;
-    
-                            // Cập nhật tổng tiền trong giỏ hàng
-                            const cartPriceElement = document.querySelector('.header__cart__price span');
-                            cartPriceElement.textContent = `$${data.totalPrice.toFixed(2)}`;
-    
-                            alert('Product added to cart successfully!');
+                            alert(data.message);
+                        window.location.reload();
                         } else {
-                            alert('you need to login to add products to the cart'); // Thông báo lỗi nếu có
+                            alert(data.message); // Thông báo lỗi nếu có
                         }
                     })
                     .catch(error => console.error('Error:', error));
@@ -249,17 +267,147 @@
                         if (data.success) {
                             // Cập nhật số lượng sản phẩm trong icon wishlist
                             const wishlistCountElement = document.querySelector('.header__cart ul li:nth-child(1) span');
-                            wishlistCountElement.textContent = data.totalWishlist;
+                            if (wishlistCountElement) wishlistCountElement.textContent = data.wishlistCount;
     
-                            alert('Product added to wishlist successfully!');
+                            alert(data.message);
                         } else {
-                            alert(data.error || 'Failed to add product to wishlist');
+                            alert(data.message);
                         }
                     })
                     .catch(error => console.error('Error:', error));
             });
         });
     </script>
+    <script>
+        // JavaScript cho phần đánh giá sản phẩm
+        document.addEventListener('DOMContentLoaded', function() {
+            const reviewTab = document.getElementById('tabs-3');
+            const productId = reviewTab ? reviewTab.dataset.productId : null;
+            const reviewsListDiv = document.getElementById('reviews-list');
+            const reviewCountSpan = document.getElementById('review-count');
+            const submitReviewForm = document.getElementById('submit-review-form');
+
+            async function fetchReviews() {
+                if (!productId) {
+                    reviewsListDiv.innerHTML = `<p>Không thể tải đánh giá do thiếu ID sản phẩm.</p>`;
+                    return;
+                }
+                try {
+                    const response = await fetch(`/api/products/${productId}/reviews`);
+                    const data = await response.json();
+
+                    if (data.success) {
+                        displayReviews(data.reviews);
+                        reviewCountSpan.textContent = data.reviews.length;
+                    } else {
+                        reviewsListDiv.innerHTML = `<p>${data.message || 'Không thể tải đánh giá.'}</p>`;
+                    }
+                } catch (error) {
+                    console.error('Error fetching reviews:', error);
+                    reviewsListDiv.innerHTML = `<p>Đã xảy ra lỗi khi tải đánh giá.</p>`;
+                }
+            }
+
+            function displayReviews(reviews) {
+                if (reviews.length === 0) {
+                    reviewsListDiv.innerHTML = `<p>Chưa có đánh giá nào cho sản phẩm này.</p>`;
+                    return;
+                }
+
+                reviewsListDiv.innerHTML = ''; // Clear previous reviews
+                reviews.forEach(review => {
+                    const reviewElement = document.createElement('div');
+                    reviewElement.classList.add('single-review', 'mb-3', 'pb-3', 'border-bottom');
+                    
+                    const starsHtml = Array(review.rating).fill('<i class="fa fa-star text-warning"></i>').join('') +
+                                      Array(5 - review.rating).fill('<i class="fa fa-star-o text-secondary"></i>').join('');
+
+                    reviewElement.innerHTML = `
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h6 class="mb-0">${review.user.email}</h6>
+                            <small class="text-muted">${new Date(review.createdAt).toLocaleDateString('vi-VN')}</small>
+                        </div>
+                        <div class="rating mb-2">
+                            ${starsHtml}
+                        </div>
+                        <p>${review.comment || ''}</p>
+                        ${review.adminReply ? `
+                            <div class="admin-reply mt-2 ml-4 p-2" style="background-color: #f8f9fa; border-left: 3px solid #007bff;">
+                                <strong>Phản hồi từ cửa hàng:</strong>
+                                <p class="mb-0">${review.adminReply}</p>
+                            </div>
+                        ` : ''}
+                    `;
+                    reviewsListDiv.appendChild(reviewElement);
+                });
+            }
+
+            if (submitReviewForm) {
+                submitReviewForm.addEventListener('submit', async function(event) {
+                    event.preventDefault();
+
+                    const rating = document.querySelector('input[name="rating"]:checked');
+                    const comment = document.getElementById('comment').value;
+
+                    if (!rating) {
+                        alert('Vui lòng chọn số sao đánh giá.');
+                        return;
+                    }
+
+                    try {
+                        const response = await fetch('/api/reviews', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                productId: productId,
+                                rating: parseInt(rating.value),
+                                comment: comment
+                            })
+                        });
+                        const data = await response.json();
+
+                        if (data.success) {
+                            alert(data.message);
+                            submitReviewForm.reset(); // Reset form
+                            fetchReviews(); // Tải lại đánh giá để hiển thị đánh giá mới
+                        } else {
+                            alert(data.message || 'Gửi đánh giá thất bại.');
+                        }
+                    } catch (error) {
+                        console.error('Error submitting review:', error);
+                        alert('Đã xảy ra lỗi khi gửi đánh giá.');
+                    }
+                });
+            }
+
+            // Tải đánh giá khi trang được tải
+            fetchReviews();
+        });
+    </script>
+    <!-- Simple Star Rating CSS -->
+    <style>
+        .rating-stars {
+            display: inline-block;
+            direction: rtl; /* Đảo ngược thứ tự để sao 5 ở bên phải */
+        }
+        .rating-stars input[type="radio"] {
+            display: none;
+        }
+        .rating-stars label {
+            color: #ccc; /* Màu sao chưa chọn */
+            font-size: 25px;
+            padding: 0 5px;
+            cursor: pointer;
+        }
+        .rating-stars label:hover,
+        .rating-stars label:hover ~ label,
+        .rating-stars input[type="radio"]:checked ~ label {
+            color: #ffc107; /* Màu sao đã chọn/hover */
+        }
+        .rating-stars label:before {
+            content: '\2605'; /* Ký tự ngôi sao */
+        }
+    </style>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 

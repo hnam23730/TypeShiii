@@ -64,7 +64,7 @@
                 <div class="col-lg-3 col-md-5">
                     <div class="sidebar">
                         <div class="sidebar__item">
-                            <h4>Category</h4>
+                            <h4>Danh mục</h4>
                             <ul>
                                 <% categories.forEach(category => { %>
                                     <li class="<%= selectedCategory === category.name ? 'active' : '' %>">
@@ -103,7 +103,7 @@
                         </div>
                         <div class="sidebar__item">
                             <div class="latest-product__text">
-                                <h4>Latest Products</h4>
+                                <h4>Sản phẩm mới</h4>
                                 <div class="latest-product__slider owl-carousel">
                                     <div class="latest-prdouct__slider__item">
                                         <% products.forEach((product, index) => { %>
@@ -131,11 +131,11 @@
                         <div class="row">
                             <div class="col-lg-4 col-md-5">
                                 <div class="filter__sort">
-                                    <span>Sort By</span>
+                                    <span>Sắp xếp theo</span>
                                     <select onchange="location = this.value;">
-                                        <option value="/shop.grid?sort=default" <%= selectedSort === "default" ? "selected" : "" %>>Default</option>
-                                        <option value="/shop.grid?sort=price-asc" <%= selectedSort === "price-asc" ? "selected" : "" %>>Price: Low to High</option>
-                                        <option value="/shop.grid?sort=price-desc" <%= selectedSort === "price-desc" ? "selected" : "" %>>Price: High to Low</option>
+                                        <option value="/shop.grid?sort=default" <%= selectedSort === "default" ? "selected" : "" %>>Mặc định</option>
+                                        <option value="/shop.grid?sort=price-asc" <%= selectedSort === "price-asc" ? "selected" : "" %>>Giá: Thấp đến Cao</option>
+                                        <option value="/shop.grid?sort=price-desc" <%= selectedSort === "price-desc" ? "selected" : "" %>>Giá: Cao đến Thấp</option>
                                     </select>
                                 </div>
                             </div>  
@@ -234,17 +234,10 @@
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
-                            // Cập nhật số lượng sản phẩm trong icon giỏ hàng
-                            const cartQuantityElement = document.querySelector('.header__cart ul li:nth-child(2) span');
-                            cartQuantityElement.textContent = data.totalQuantity;
-    
-                            // Cập nhật tổng tiền trong giỏ hàng
-                            const cartPriceElement = document.querySelector('.header__cart__price span');
-                            cartPriceElement.textContent = `$${data.totalPrice.toFixed(2)}`;
-    
-                            alert('Product added to cart successfully!');
+                            alert(data.message);
+                        window.location.reload();
                         } else {
-                            alert(data.error || 'Failed to add product to cart');
+                            alert(data.message);
                         }
                     })
                     .catch(error => console.error('Error:', error));
@@ -269,11 +262,11 @@
                         if (data.success) {
                             // Cập nhật số lượng sản phẩm trong icon wishlist
                             const wishlistCountElement = document.querySelector('.header__cart ul li:nth-child(1) span');
-                            wishlistCountElement.textContent = data.totalWishlist;
+                            if (wishlistCountElement) wishlistCountElement.textContent = data.wishlistCount;
     
-                            alert('Product added to wishlist successfully!');
+                            alert(data.message);
                         } else {
-                            alert(data.error || 'Failed to add product to wishlist');
+                            alert(data.message);
                         }
                     })
                     .catch(error => console.error('Error:', error));

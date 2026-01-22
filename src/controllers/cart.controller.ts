@@ -24,7 +24,7 @@ class CartController {
             const product = await AppDataSource.getRepository(Product).findOneBy({ id: parseInt(productId) });
 
             if (!product) {
-                res.status(404).send("Product not found");
+                res.status(404).send("Không tìm thấy sản phẩm");
                 return;
             }
 

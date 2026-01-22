@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Home</title>
+    <title>Quản lý người dùng</title>
     <!-- Custom fonts for this template-->
     <link href="css/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
@@ -40,8 +40,8 @@
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">User manager</h1>
-                            <a href="/users/create" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm"> Add new</a>
+                        <h1 class="h3 mb-0 text-gray-800">Quản lý người dùng</h1>
+                            <a href="/users/create" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm"> Thêm mới</a>
 
                     </div>
                     
@@ -53,8 +53,8 @@
                                     <tr>
                                         <th scope="col">#</th>
                                         <th scope="col">Email</th>
-                                        <th scope="col">Role</th>
-                                        <th scope="col">Action</th>
+                                        <th scope="col">Vai trò</th>
+                                        <th scope="col">Hành động</th>
                                     </tr>
                                 <tbody>
                                     <% users.forEach((user, index)=> { %>
@@ -67,16 +67,16 @@
                                                 <%= user.email %>
                                             </td>
                                             <td>
-                                                <%= user.role ? user.role.name : 'No role' %>
+                                                <%= user.role ? user.role.name : 'Chưa có vai trò' %>
                                             </td>
                                                 <td>
                                                     <a href="/users/<%= user.id %>/edit"><button type="button"
-                                                            class="btn btn-primary">Edit</button></a>
+                                                            class="btn btn-primary">Sửa</button></a>
         
                                                     <% if(userLogin.id !=user.id) { %>
-                                                        <a onclick="return confirm('are you sure?')"
+                                                        <a onclick="return confirm('Bạn có chắc chắn không?')"
                                                             href="/users/<%= user.id %>/delete" type="button"
-                                                            class="btn btn-danger">Delete</a>
+                                                            class="btn btn-danger">Xóa</a>
                                                     <% } %>
         
                                                 </td>
@@ -116,15 +116,15 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Bạn muốn đăng xuất?</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-body">Chọn "Đăng xuất" bên dưới nếu bạn muốn kết thúc phiên làm việc hiện tại.</div>
                 <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="/login">Logout</a>
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Hủy</button>
+                    <a class="btn btn-primary" href="/login">Đăng xuất</a>
                 </div>
             </div>
         </div>

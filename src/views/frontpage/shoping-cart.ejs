@@ -67,10 +67,10 @@
                         <table>
                             <thead>
                                 <tr>
-                                    <th class="shoping__product">Products</th>
-                                    <th>Price</th>
-                                    <th>Quantity</th>
-                                    <th>Total</th>
+                                    <th class="shoping__product">Sản phẩm</th>
+                                    <th>Giá</th>
+                                    <th>Số lượng</th>
+                                    <th>Tổng cộng</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -102,7 +102,7 @@
                                     <% }) %>
                                 <% } else { %>
                                     <tr>
-                                        <td colspan="5" class="text-center">Your shopping cart is empty.</td>
+                                        <td colspan="5" class="text-center">Giỏ hàng của bạn đang trống.</td>
                                     </tr>
                                 <% } %>
                             </tbody>
@@ -113,30 +113,30 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="shoping__cart__btns">
-                        <a href="./shop.grid" class="primary-btn cart-btn">CONTINUE SHOPPING</a>
+                        <a href="./shop.grid" class="primary-btn cart-btn">TIẾP TỤC MUA SẮM</a>
                     </div>
                 </div>
-                <div class="col-lg-6">
+                <!--<div class="col-lg-6">
                     <div class="shoping__continue">
                         <div class="shoping__discount">
-                            <h5>Discount Codes</h5>
+                            <h5>Mã giảm giá</h5>
                             <form action="#">
-                                <input type="text" placeholder="Enter your coupon code">
-                                <button type="submit" class="site-btn">APPLY COUPON</button>
+                                <input type="text" placeholder="Nhập mã giảm giá của bạn">
+                                <button type="submit" class="site-btn">ÁP DỤNG</button>
                             </form>
                         </div>
                     </div>
-                </div>
+                </div>-->
                 <div class="col-lg-6">
                     <div class="shoping__checkout">
-                        <h5>Cart Total</h5>
+                        <h5>Tổng giỏ hàng</h5>
                         <ul>
-                            <li>Total <span>$<%= total.toFixed(2) %></span></li>
+                            <li>Tổng cộng <span>$<%= total.toFixed(2) %></span></li>
                         </ul>
                         <% if (shopingCart.length > 0) { %>
-                            <a href="/checkout" class="primary-btn">PROCEED TO CHECKOUT</a>
+                            <a href="/checkout" class="primary-btn">TIẾN HÀNH THANH TOÁN</a>
                         <% } else { %>
-                            <button class="primary-btn disabled" disabled>PROCEED TO CHECKOUT</button>
+                            <button class="primary-btn disabled" disabled>TIẾN HÀNH THANH TOÁN</button>
                         <% } %>
                     </div>
                 </div>
@@ -195,7 +195,7 @@
                         // Cập nhật tổng tiền của giỏ hàng
                         document.querySelector('.shoping__checkout span').textContent = `$${data.total.toFixed(2)}`;
                     } else {
-                        alert(data.error || 'Failed to update cart');
+                        alert(data.error || 'Cập nhật giỏ hàng thất bại');
                     }
                 })
                 .catch(error => console.error('Error:', error));
@@ -216,7 +216,7 @@
                         if (data.success) {
                             location.reload(); // Reload the page to reflect changes
                         } else {
-                            alert(data.error || 'Failed to remove product');
+                            alert(data.error || 'Xóa sản phẩm thất bại');
                         }
                     })
                     .catch(error => console.error('Error:', error));

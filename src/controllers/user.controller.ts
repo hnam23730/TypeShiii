@@ -16,14 +16,14 @@ class UserController {
             const { email, password, roleId } = req.body;
     
             if (!email || !password || !roleId) {
-                return res.status(400).send("All fields are required.");
+                return res.status(400).send("Vui lòng điền đầy đủ thông tin.");
             }
     
             await UserService.createUser({ email, password, roleId });
             res.redirect("/users");
         } catch (error) {
             console.error("Error creating user:", error);
-            res.status(500).send("Internal Server Error");
+            res.status(500).send("Lỗi máy chủ nội bộ");
         }
     }
 
@@ -31,14 +31,14 @@ class UserController {
         try {
             const user = await UserService.getUserById(parseInt(req.params.id));
             if (!user) {
-                return res.status(404).send("User not found.");
+                return res.status(404).send("Không tìm thấy người dùng.");
             }
     
             const roles = await UserService.getAllRoles(); // Giả sử bạn có hàm lấy danh sách vai trò
             res.render("users/edit.ejs", { userEdit: user, roles, userLogin: req.session.userLogin });
         } catch (error) {
             console.error("Error fetching user:", error);
-            res.status(500).send("Internal Server Error");
+            res.status(500).send("Lỗi máy chủ nội bộ");
         }
     }
 
@@ -47,14 +47,14 @@ class UserController {
             const { email, roleId } = req.body;
     
             if (!email || !roleId) {
-                return res.status(400).send("All fields are required.");
+                return res.status(400).send("Vui lòng điền đầy đủ thông tin.");
             }
     
             await UserService.updateUser(parseInt(req.params.id), { email, roleId });
             res.redirect("/users");
         } catch (error) {
             console.error("Error updating user:", error);
-            res.status(500).send("Internal Server Error");
+            res.status(500).send("Lỗi máy chủ nội bộ");
         }
     }
 
@@ -63,22 +63,22 @@ class UserController {
             const userId = parseInt(req.params.id);
     
             if (isNaN(userId)) {
-                return res.status(400).send("Invalid user ID.");
+                return res.status(400).send("ID người dùng không hợp lệ.");
             }
     
             if (!req.session.userLogin) {
-                return res.status(401).send("Unauthorized: User not logged in.");
+                return res.status(401).send("Không có quyền truy cập: Người dùng chưa đăng nhập.");
             }
     
             if (req.session.userLogin.id === userId) {
-                return res.status(403).send("You cannot delete your own account.");
+                return res.status(403).send("Bạn không thể xóa tài khoản của chính mình.");
             }
     
             await UserService.deleteUser(userId, req);
             res.redirect("/users");
         } catch (error) {
             console.error("Error deleting user:", error);
-            res.status(500).send("Internal Server Error");
+            res.status(500).send("Lỗi máy chủ nội bộ");
         }
     }
 }

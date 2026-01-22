@@ -1,5 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from "typeorm";
 import { Category } from "./Category";
+import { Review } from "./Review";
+import { OrderDetail } from "./OrderDetail";
 
 @Entity({ name: "products" })
 export class Product {
@@ -32,4 +34,10 @@ export class Product {
 
     @ManyToOne(() => Category, (category) => category.products, { nullable: true, onDelete: 'SET NULL' })
     category: Category | null;
+
+    @OneToMany(() => Review, review => review.product)
+    reviews: Review[];
+
+    @OneToMany(() => OrderDetail, orderDetail => orderDetail.product)
+    orderDetails: OrderDetail[];
 }
