@@ -38,7 +38,7 @@ export const appPromise = AppDataSource.initialize()
 
         const app: Express = express();
         const port = process.env.PORT || 3000;
-        app.set("trust proxy", 1); // Quan trọng: Tin tưởng proxy của Vercel để Cookie hoạt động
+        app.set("trust proxy", true); // Quan trọng: Tin tưởng proxy (Cloudflare/Render) để Cookie và Protocol hoạt động đúng
         app.use(express.static(path.join(__dirname, "../public")));
         app.use(express.static(path.join(__dirname, "../publicFP")));
         app.use(cors())

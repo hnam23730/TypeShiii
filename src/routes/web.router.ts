@@ -575,7 +575,7 @@ router.post("/shoping-cart/remove", (req, res) => {
     }
 });
 //trang sản phẩm gì đó
-router.get('/order-success', (req: Request, res: Response) => {
+router.all('/order-success', (req: Request, res: Response) => {
     const order = (req.session as any).order;
 
     // Kiểm tra nếu không có thông tin đơn hàng
