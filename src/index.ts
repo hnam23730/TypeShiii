@@ -38,7 +38,7 @@ export const appPromise = AppDataSource.initialize()
 
         const app: Express = express();
         const port = process.env.PORT || 3000;
-        app.set("trust proxy", true); // Quan trọng: Tin tưởng proxy (Cloudflare/Render) để Cookie và Protocol hoạt động đúng
+        app.set("trust proxy", 1); // Quan trọng: Trên Vercel nên để là 1 để tin tưởng proxy đầu tiên
         app.use(express.static(path.join(__dirname, "../public")));
         app.use(express.static(path.join(__dirname, "../publicFP")));
         app.use(cors())
@@ -53,6 +53,7 @@ export const appPromise = AppDataSource.initialize()
         const sessionRepository = AppDataSource.getRepository(Session);
         app.use(session({
             secret: process.env.SESSION_SECRET || "secret",
+            proxy: true, // BẮT BUỘC trên Vercel để cookie secure hoạt động đúng
             resave: false,
             saveUninitialized: false, // Tốt hơn cho production
             store: new TypeormStore({
@@ -60,8 +61,9 @@ export const appPromise = AppDataSource.initialize()
                 ttl: 86400 // Thời gian sống của session: 1 ngày
             }).connect(sessionRepository),
             cookie: {
-                secure: process.env.NODE_ENV === 'production', // Chỉ bật secure trên production (HTTPS)
-                sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax' // Cấu hình sameSite phù hợp
+                secure: true, // Vercel luôn chạy HTTPS nên bắt buộc phải là true
+                sameSite: 'lax', // 'lax' an toàn và ổn định hơn 'none' cho việc chuyển trang nội bộ
+                maxAge: 24 * 60 * 60 * 1000 // 1 ngày
             }
         }));
 
