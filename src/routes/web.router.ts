@@ -218,8 +218,8 @@ router.get('/register', AuthController.showFormRegister);
 router.post('/register', AuthController.register);
 router.get('/login', AuthController.showFormLogin);
 router.post('/login', AuthController.login);
-router.get('/users',checkAuth, UserController.index);
-router.post('/users', checkAuth, (req, res) => res.redirect('/users')); // Fix lỗi Cannot POST /users
+router.get('/users', checkAuth, checkPermission, UserController.index);
+router.post('/users', checkAuth, checkPermission, (req, res) => res.redirect('/users')); // Fix lỗi Cannot POST /users
 router.get('/users/create', checkAuth, checkPermission, UserController.showCreateForm);
 router.post('/users/create', checkAuth, checkPermission, UserController.create);
 router.get('/users/:id/edit', checkAuth, checkPermission, UserController.showEditForm);
@@ -333,25 +333,25 @@ router.get('/search', asyncHandler(async (req: Request, res: Response, next: Nex
         next(error); // Pass the error to the next middleware
     }
 }));
-router.get("/products", ProductController.list);
-router.post("/products", (req, res) => res.redirect("/products")); // Fix lỗi Cannot POST /products
-router.get("/products/create", ProductController.showCreateForm);
-router.post("/products/create", ProductController.create);
-router.get("/products/:id/edit", ProductController.showEditForm);
-router.post("/products/:id/edit", ProductController.update);
-router.get("/products/:id/delete", ProductController.delete);
+router.get("/products", checkAuth, checkPermission, ProductController.list);
+router.post("/products", checkAuth, checkPermission, (req, res) => res.redirect("/products")); // Fix lỗi Cannot POST /products
+router.get("/products/create", checkAuth, checkPermission, ProductController.showCreateForm);
+router.post("/products/create", checkAuth, checkPermission, ProductController.create);
+router.get("/products/:id/edit", checkAuth, checkPermission, ProductController.showEditForm);
+router.post("/products/:id/edit", checkAuth, checkPermission, ProductController.update);
+router.get("/products/:id/delete", checkAuth, checkPermission, ProductController.delete);
 //san phẩm gì đó
 
-router.get("/categories", CategoryController.list);
-router.post("/categories", (req, res) => res.redirect("/categories")); // Fix lỗi Cannot POST /categories
-router.get("/categories/create", CategoryController.showCreateForm);
-router.post("/categories/create", CategoryController.create);
-router.get("/categories/:id/edit", CategoryController.showEditForm);
-router.post("/categories/:id/edit", (req, res, next) => CategoryController.update(req, res, next));
-router.post("/categories/:id/delete", (req, res) => { CategoryController.delete(req, res); });
+router.get("/categories", checkAuth, checkPermission, CategoryController.list);
+router.post("/categories", checkAuth, checkPermission, (req, res) => res.redirect("/categories")); // Fix lỗi Cannot POST /categories
+router.get("/categories/create", checkAuth, checkPermission, CategoryController.showCreateForm);
+router.post("/categories/create", checkAuth, checkPermission, CategoryController.create);
+router.get("/categories/:id/edit", checkAuth, checkPermission, CategoryController.showEditForm);
+router.post("/categories/:id/edit", checkAuth, checkPermission, (req, res, next) => CategoryController.update(req, res, next));
+router.post("/categories/:id/delete", checkAuth, checkPermission, (req, res) => { CategoryController.delete(req, res); });
 //danh mục gì đó
-router.get("/order", OrderController.list);
-router.post("/order/update", OrderController.update);
+router.get("/order", checkAuth, checkPermission, OrderController.list);
+router.post("/order/update", checkAuth, checkPermission, OrderController.update);
 router.get("/admin/export-revenue", checkAuth, checkPermission, OrderController.exportRevenueReport);
 
 // Review Routes
