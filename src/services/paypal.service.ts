@@ -15,7 +15,7 @@ const environment =
           console.log("PAYPAL_MODE:", process.env.PAYPAL_MODE);
 const client = new paypal.core.PayPalHttpClient(environment);
 
-export const createOrder = async (total: number, baseUrl: string = 'http://localhost:3000') => {
+export const createOrder = async (total: number) => {
     try {
         // Nếu total không hợp lệ, đặt giá trị mặc định
         if (isNaN(total) || total <= 0) {
@@ -36,8 +36,8 @@ export const createOrder = async (total: number, baseUrl: string = 'http://local
                 },
             ],
             application_context: {
-                return_url: `${baseUrl}/api/payment/paypal/capture`, // URL callback sau khi thanh toán thành công
-                cancel_url: `${baseUrl}/checkout`, // URL callback nếu người dùng hủy thanh toán
+                return_url: "http://localhost:3000/api/payment/paypal/capture", // URL callback sau khi thanh toán thành công
+                cancel_url: "http://localhost:3000/checkout", // URL callback nếu người dùng hủy thanh toán
             },
         });
 
