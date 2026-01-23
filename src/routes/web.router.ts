@@ -351,6 +351,7 @@ router.post("/categories/:id/edit", checkAuth, checkPermission, (req, res, next)
 router.post("/categories/:id/delete", checkAuth, checkPermission, (req, res) => { CategoryController.delete(req, res); });
 //danh mục gì đó
 router.get("/order", checkAuth, checkPermission, asyncHandler(OrderController.list));
+router.post("/order", checkAuth, checkPermission, (req, res) => res.redirect(303, "/order")); // Fix lỗi Cannot POST /order
 router.get("/orders", checkAuth, checkPermission, (req, res) => res.redirect("/order")); // Alias cho trường hợp gõ nhầm số nhiều
 router.post("/order/update", checkAuth, checkPermission, asyncHandler(OrderController.update));
 router.get("/admin/export-revenue", checkAuth, checkPermission, asyncHandler(OrderController.exportRevenueReport));
@@ -814,6 +815,9 @@ router.post('/checkout/vnpay', asyncHandler(async (req: Request, res: Response, 
             }
         }
 
+        // FIX: Xác định Base URL động (ưu tiên biến môi trường, nếu không thì lấy từ request)
+        const baseUrl = process.env.BASE_URL || `${req.protocol}://${req.get('host')}`;
+
         // Tạo URL thanh toán VNPay
         const paymentUrl = vnpay.buildPaymentUrl({
             vnp_Amount: amountVnd,
@@ -821,7 +825,9 @@ router.post('/checkout/vnpay', asyncHandler(async (req: Request, res: Response, 
             vnp_TxnRef: savedOrder.id.toString(), // Mã đơn hàng
             vnp_OrderInfo: `Thanh toan don hang #${savedOrder.id}`,
             vnp_OrderType: ProductCode.Other,
-            vnp_ReturnUrl: process.env.VNP_RETURN_URL || 'http://localhost:3000/vnpay-return',
+            //vnp_ReturnUrl: process.env.VNP_RETURN_URL || 'http://localhost:3000/vnpay-return',
+
+            vnp_ReturnUrl: process.env.VNP_RETURN_URL || `${baseUrl}/vnpay-return`,
         });
 
         // Lưu order vào session để dùng lại nếu cần
