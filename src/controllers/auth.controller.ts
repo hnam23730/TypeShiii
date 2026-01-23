@@ -14,6 +14,13 @@ class AuthController {
     
     static async register(req: Request, res: Response) {
     try {
+        const { email, password } = req.body;
+        // Kiểm tra dữ liệu đầu vào
+        if (!email || !password) {
+            (req as any).flash('error', 'Vui lòng điền đầy đủ email và mật khẩu.');
+            return res.redirect('/register');
+        }
+
         // Đăng ký người dùng
         await AuthService.registerUser(req.body);
 
@@ -26,18 +33,27 @@ class AuthController {
 
         await sendEmail(req.body.email, "Chào mừng bạn đến với website của chúng tôi!", emailContent);
 
+        (req as any).flash('success', 'Đăng ký thành công! Vui lòng đăng nhập.');
         // Chuyển hướng đến trang đăng nhập
         res.redirect('/login');
-    } catch (error) {
+    } catch (error: any) {
         console.error("Error during registration:", error);
-        res.status(500).send("Lỗi máy chủ nội bộ");
+        // Thông báo lỗi cụ thể (ví dụ: Email đã tồn tại)
+        (req as any).flash('error', error.message || 'Đăng ký thất bại. Vui lòng thử lại.');
+        res.redirect('/register');
     }
     }
 
     static async login(req: any, res: Response) {
         try {
+            const { email, password } = req.body;
+            if (!email || !password) {
+                req.flash('error', 'Vui lòng nhập email và mật khẩu.');
+                return res.redirect('/login');
+            }
             const account = await AuthService.checkAccount(req.body);
             if (!account) {
+                req.flash('error', 'Email hoặc mật khẩu không đúng.'); // Gửi thông báo lỗi
                 return res.redirect('/login'); // Quay lại trang đăng nhập nếu thông tin không hợp lệ
             }
     

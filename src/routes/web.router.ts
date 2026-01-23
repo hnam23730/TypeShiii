@@ -682,7 +682,8 @@ router.post("/api/payment/paypal/create", asyncHandler(async (req: Request, res:
             return;
         }
 
-        const order = await createOrder(total);
+        const baseUrl = process.env.BASE_URL || `${req.protocol}://${req.get('host')}`;
+        const order = await createOrder(total, baseUrl);
 
         if (!order || !order.id) {
             res.status(500).json({ error: "Không thể tạo đơn hàng PayPal" });
@@ -817,6 +818,7 @@ router.post('/checkout/vnpay', asyncHandler(async (req: Request, res: Response, 
 
         // FIX: Xác định Base URL động (ưu tiên biến môi trường, nếu không thì lấy từ request)
         const baseUrl = process.env.BASE_URL || `${req.protocol}://${req.get('host')}`;
+        console.log("VNPay Payment Base URL:", baseUrl); // Kiểm tra log trên Vercel xem nó ra domain gì
 
         // Tạo URL thanh toán VNPay
         const paymentUrl = vnpay.buildPaymentUrl({

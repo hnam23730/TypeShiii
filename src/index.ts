@@ -14,6 +14,7 @@ import { Role } from "./entities/Role";
 import passport from "./config/passport";
 import { TypeormStore } from "connect-typeorm";
 import { Session } from "./entities/Session";
+import flash from "connect-flash";
 
 
 
@@ -76,6 +77,7 @@ export const appPromise = AppDataSource.initialize()
                 maxAge: 24 * 60 * 60 * 1000 // 1 ngày
             }
         }));
+        app.use(flash()); // Kích hoạt flash messages
 
         // Khởi tạo Passport SAU KHI session đã sẵn sàng
         app.use(passport.initialize());
@@ -84,6 +86,8 @@ export const appPromise = AppDataSource.initialize()
         // Middleware tùy chỉnh phải được đặt SAU KHI session và passport đã được khởi tạo
         app.use(function(req: any, res: any, next: NextFunction) {
             res.locals.userLogin = req.session.userLogin || null; // Make userLogin available in all views
+            res.locals.error = req.flash('error'); // Truyền thông báo lỗi xuống view
+            res.locals.success = req.flash('success'); // Truyền thông báo thành công xuống view
             next();
         });
         app.use((req, res, next) => {
