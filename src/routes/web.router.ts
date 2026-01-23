@@ -219,7 +219,7 @@ router.post('/register', AuthController.register);
 router.get('/login', AuthController.showFormLogin);
 router.post('/login', AuthController.login);
 router.get('/users', checkAuth, checkPermission, UserController.index);
-router.post('/users', checkAuth, checkPermission, (req, res) => res.redirect('/users')); // Fix lỗi Cannot POST /users
+router.post('/users', checkAuth, checkPermission, (req, res) => res.redirect(303, '/users')); // Fix lỗi Cannot POST /users
 router.get('/users/create', checkAuth, checkPermission, UserController.showCreateForm);
 router.post('/users/create', checkAuth, checkPermission, UserController.create);
 router.get('/users/:id/edit', checkAuth, checkPermission, UserController.showEditForm);
@@ -334,7 +334,7 @@ router.get('/search', asyncHandler(async (req: Request, res: Response, next: Nex
     }
 }));
 router.get("/products", checkAuth, checkPermission, ProductController.list);
-router.post("/products", checkAuth, checkPermission, (req, res) => res.redirect("/products")); // Fix lỗi Cannot POST /products
+router.post("/products", checkAuth, checkPermission, (req, res) => res.redirect(303, "/products")); // Fix lỗi Cannot POST /products
 router.get("/products/create", checkAuth, checkPermission, ProductController.showCreateForm);
 router.post("/products/create", checkAuth, checkPermission, ProductController.create);
 router.get("/products/:id/edit", checkAuth, checkPermission, ProductController.showEditForm);
@@ -343,16 +343,17 @@ router.get("/products/:id/delete", checkAuth, checkPermission, ProductController
 //san phẩm gì đó
 
 router.get("/categories", checkAuth, checkPermission, CategoryController.list);
-router.post("/categories", checkAuth, checkPermission, (req, res) => res.redirect("/categories")); // Fix lỗi Cannot POST /categories
+router.post("/categories", checkAuth, checkPermission, (req, res) => res.redirect(303, "/categories")); // Fix lỗi Cannot POST /categories
 router.get("/categories/create", checkAuth, checkPermission, CategoryController.showCreateForm);
 router.post("/categories/create", checkAuth, checkPermission, CategoryController.create);
 router.get("/categories/:id/edit", checkAuth, checkPermission, CategoryController.showEditForm);
 router.post("/categories/:id/edit", checkAuth, checkPermission, (req, res, next) => CategoryController.update(req, res, next));
 router.post("/categories/:id/delete", checkAuth, checkPermission, (req, res) => { CategoryController.delete(req, res); });
 //danh mục gì đó
-router.get("/order", checkAuth, checkPermission, OrderController.list);
-router.post("/order/update", checkAuth, checkPermission, OrderController.update);
-router.get("/admin/export-revenue", checkAuth, checkPermission, OrderController.exportRevenueReport);
+router.get("/order", checkAuth, checkPermission, asyncHandler(OrderController.list));
+router.get("/orders", checkAuth, checkPermission, (req, res) => res.redirect("/order")); // Alias cho trường hợp gõ nhầm số nhiều
+router.post("/order/update", checkAuth, checkPermission, asyncHandler(OrderController.update));
+router.get("/admin/export-revenue", checkAuth, checkPermission, asyncHandler(OrderController.exportRevenueReport));
 
 // Review Routes
 
@@ -415,7 +416,7 @@ router.get('/api/notifications', checkAuth, checkPermission, asyncHandler(Notifi
 router.post('/api/notifications/:id/read', checkAuth, checkPermission, asyncHandler(NotificationController.markAsRead));
 
 router.get('/wishlist', checkAuth, WishlistController.viewWishlist);
-router.post('/wishlist', checkAuth, (req, res) => res.redirect('/wishlist')); // Fix lỗi Cannot POST /wishlist
+router.post('/wishlist', checkAuth, (req, res) => res.redirect(303, '/wishlist')); // Fix lỗi Cannot POST /wishlist
 router.post('/wishlist/add', checkAuthAjax, (req, res, next) => WishlistController.addToWishlist(req, res, next));
 router.post('/wishlist/remove', checkAuth, (req, res) => WishlistController.removeFromWishlist(req, res));
 router.post('/wishlist/buy', checkAuth, (req, res, next) => WishlistController.buyFromWishlist(req, res, next));
@@ -471,7 +472,7 @@ router.get("/shoping-cart", async (req, res) => {
         res.status(500).send("Lỗi máy chủ nội bộ");
     }
 });
-router.post("/shoping-cart", (req, res) => res.redirect("/shoping-cart")); // Fix lỗi Cannot POST /shoping-cart
+router.post("/shoping-cart", (req, res) => res.redirect(303, "/shoping-cart")); // Fix lỗi Cannot POST /shoping-cart
 router.get("/shoping-cart/data", (req, res) => {
     try {
         const shopingCart = (req.session as any).shopingCart || [];
@@ -1072,7 +1073,7 @@ router.post("/chat", asyncHandler(async (req: Request, res: Response): Promise<v
 
 // Admin Review Management
 router.get('/admin/reviews', checkAuth, checkPermission, asyncHandler(ReviewController.adminListReviews));
-router.post('/admin/reviews', checkAuth, checkPermission, (req, res) => res.redirect('/admin/reviews')); // Fix lỗi Cannot POST /admin/reviews
+router.post('/admin/reviews', checkAuth, checkPermission, (req, res) => res.redirect(303, '/admin/reviews')); // Fix lỗi Cannot POST /admin/reviews
 router.post('/admin/reviews/:reviewId/reply', checkAuth, checkPermission, asyncHandler(ReviewController.submitAdminReply));
 
 export default router;
