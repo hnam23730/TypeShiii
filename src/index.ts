@@ -17,10 +17,12 @@ import { Session } from "./entities/Session";
 import flash from "connect-flash";
 
 
+let app: Express | null = null;
 
-export const appPromise = AppDataSource.initialize()
-    .then(async () => {
-        console.log("Data Source has been initialized!")
+const bootstrap = async () => {
+    if (!AppDataSource.isInitialized) {
+        await AppDataSource.initialize();
+        console.log("Data Source has been initialized!");
 
         // --- Database Seeding Logic ---
         console.log("Seeding database with initial data if necessary...");
@@ -36,8 +38,10 @@ export const appPromise = AppDataSource.initialize()
             await roleRepository.save({ id: 2, name: "user" });
         }
         console.log("Seeding complete.");
+    }
 
-        const app: Express = express();
+    if (!app) {
+        app = express();
         const port = process.env.PORT || 3000;
         app.set("trust proxy", 1); // Quan trọng: Trên Vercel nên để là 1 để tin tưởng proxy đầu tiên
         
@@ -113,22 +117,17 @@ export const appPromise = AppDataSource.initialize()
         app.use(router);
         app.use("/api/v1/",apiRouter)
         
-        return app;
-    })
-    .catch((err) => {
-        console.error("FATAL: Error during application startup.", err);
-        // In a serverless environment, throwing the error is better than process.exit()
-        // as it allows the platform to log the specific error.
-        throw err;
-    })
+    }
+    return app;
+};
 
 export default async function handler(req: any, res: any) {
-    const app = await appPromise;
+    const app = await bootstrap();
     app(req, res);
 }
 
 if (require.main === module) {
-    appPromise.then(app => {
+    bootstrap().then(app => {
         const port = process.env.PORT || 3000;
         app.listen(port, () => {
             console.log(`[server]: Server is running at http://localhost:${port}`);
