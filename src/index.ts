@@ -20,25 +20,26 @@ import flash from "connect-flash";
 let app: Express | null = null;
 
 const bootstrap = async () => {
-    if (!AppDataSource.isInitialized) {
-        await AppDataSource.initialize();
-        console.log("Data Source has been initialized!");
+    // TẠM THỜI TẮT DB ĐỂ CHẠY WEB
+    // if (!AppDataSource.isInitialized) {
+    //     await AppDataSource.initialize();
+    //     console.log("Data Source has been initialized!");
 
-        // --- Database Seeding Logic ---
-        console.log("Seeding database with initial data if necessary...");
-        const roleRepository = AppDataSource.getRepository(Role);
-        const adminRoleExists = await roleRepository.findOneBy({ id: 1 });
-        if (!adminRoleExists) {
-            console.log("Creating admin role...");
-            await roleRepository.save({ id: 1, name: "admin" });
-        }
-        const userRoleExists = await roleRepository.findOneBy({ id: 2 });
-        if (!userRoleExists) {
-            console.log("Creating user role...");
-            await roleRepository.save({ id: 2, name: "user" });
-        }
-        console.log("Seeding complete.");
-    }
+    //     // --- Database Seeding Logic ---
+    //     console.log("Seeding database with initial data if necessary...");
+    //     const roleRepository = AppDataSource.getRepository(Role);
+    //     const adminRoleExists = await roleRepository.findOneBy({ id: 1 });
+    //     if (!adminRoleExists) {
+    //         console.log("Creating admin role...");
+    //         await roleRepository.save({ id: 1, name: "admin" });
+    //     }
+    //     const userRoleExists = await roleRepository.findOneBy({ id: 2 });
+    //     if (!userRoleExists) {
+    //         console.log("Creating user role...");
+    //         await roleRepository.save({ id: 2, name: "user" });
+    //     }
+    //     console.log("Seeding complete.");
+    // }
 
     if (!app) {
         app = express();
@@ -65,16 +66,16 @@ const bootstrap = async () => {
         app.use(bodyParser.json());
 
         // configure session
-        const sessionRepository = AppDataSource.getRepository(Session);
+        // const sessionRepository = AppDataSource.getRepository(Session); // Tắt lấy repo session
         app.use(session({
             secret: process.env.SESSION_SECRET || "secret",
             proxy: true, // BẮT BUỘC trên Vercel để cookie secure hoạt động đúng
             resave: false,
             saveUninitialized: false, // Tốt hơn cho production
-            store: new TypeormStore({
-                // cleanupLimit: 2, // Bị lỗi trên các phiên bản MySQL cũ. Bỏ comment nếu bạn dùng MySQL 5.7+
-                ttl: 86400 // Thời gian sống của session: 1 ngày
-            }).connect(sessionRepository),
+            // store: new TypeormStore({ // Tắt store DB, dùng MemoryStore mặc định
+            //     // cleanupLimit: 2, // Bị lỗi trên các phiên bản MySQL cũ. Bỏ comment nếu bạn dùng MySQL 5.7+
+            //     ttl: 86400 // Thời gian sống của session: 1 ngày
+            // }).connect(sessionRepository),
             cookie: {
                 secure: process.env.NODE_ENV === 'production', // Chỉ bật secure trên production (HTTPS), tắt khi chạy local
                 sameSite: 'lax', // 'lax' an toàn và ổn định hơn 'none' cho việc chuyển trang nội bộ
@@ -100,8 +101,9 @@ const bootstrap = async () => {
         });
         app.use(async (req, res, next) => {
             try {
-                const categories = await AppDataSource.getRepository(Category).find();
-                res.locals.categories = categories; // Truyền danh mục đến tất cả các view
+                // const categories = await AppDataSource.getRepository(Category).find(); // Tắt gọi DB
+                // res.locals.categories = categories; 
+                res.locals.categories = []; // Giả lập dữ liệu rỗng để không lỗi view
                 next();
             } catch (error) {
                 console.error("Error fetching categories:", error);
